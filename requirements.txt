@@ -1,0 +1,12 @@
+django>=1.10
+
+# database
+psycopg2
+
+# configuration
+django-dotenv
+
+# development
+django-debug-toolbar
+ipython
+
