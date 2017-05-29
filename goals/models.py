@@ -35,13 +35,24 @@ class Goal(models.Model):
 
 
 class Indicator(models.Model):
+    YES = 'YES'
+    NO = 'NO'
+    STATS_AVAILABLE_CHOICES = (
+        (YES, _('Yes')),
+        (NO, _('No')),
+    )
     goal = models.ForeignKey(Goal, verbose_name=_('Goal'))
     code = models.CharField(_('Indicator number'), max_length=10,
                             unique=True)
-    name = models.CharField(_('Indicator name'), max_length=255)
     description = models.TextField(_('Indicator description'),
                                   blank=True)
-    slug = models.SlugField(_('Slug'))
+    target_description = models.TextField(_('Target description'),
+                                  blank=True)
+    stats_available = models.CharField(
+        _('Statistics are availble'), max_length=50, blank=True)
+    data_source = models.CharField(_('Data source'), max_length=255,
+                                   blank=True)
+    agency = models.CharField(_('Agency'), max_length=255, blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
@@ -52,18 +63,7 @@ class Indicator(models.Model):
         verbose_name_plural = _('Indicators')
 
     def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = self.get_slug()
-        super(Goal, self).save(*args, **kwargs)
-
-    def get_slug(self):
-        if not self.slug:
-            slug = slugify(self.name[:50])
-            return slug
-        return self.slug
+        return self.description
 
 
 class Component(models.Model):
