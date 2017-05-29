@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from .utils import str_to_bool
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 try:
     import dotenv
@@ -18,21 +22,19 @@ try:
 except ImportError:
     pass
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'sztug!hpjf_(7s0nmcn410t0h6esqn4246&34$4ri%vx+g2moz'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'sztug!hpjf_(7s0nmcn410t0h6esqn4246&34$4ri%vx+g2moz')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str_to_bool(os.environ.get('DEBUG', 'False'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split()
 
+INTERNAL_IPS = os.environ.get('INTERNAL_IPS', '127.0.0.1').split()
 
 # Application definition
 
@@ -43,9 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -81,8 +85,12 @@ WSGI_APPLICATION = 'sdgs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.postgresql_psycopg2'),
+        'NAME': os.environ.get('DATABASE_NAME', 'sdgs'),
+        'USER': os.environ.get('DATABASE_USER', 'sdgs'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'sdgs'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'CONN_MAX_AGE': int(os.environ.get('DATABASE_CONN_MAX_AGE', 0))
     }
 }
 
@@ -109,18 +117,26 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE', 'en-us')
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ.get('TIME_ZONE', 'Africa/Dar_es_Salaam')
 
-USE_I18N = True
+USE_I18N = str_to_bool(os.environ.get('USE_I18N', 'True'))
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = str_to_bool(os.environ.get('USE_TZ', 'True'))
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL =  os.environ.get('STATIC_URL', '/static/')
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
+STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'static_root'))
+
+MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
+
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media_root'))
