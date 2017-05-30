@@ -96,6 +96,7 @@ class Progress(models.Model):
                                   verbose_name=_('Component'))
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
+    value_unit = models.CharField(_('Value unit'), blank=True, max_length=50)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
