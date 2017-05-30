@@ -110,6 +110,10 @@ class Progress(models.Model):
         return '%d:%d' %(self.year, self.value)
 
     @cached_property
+    def component_code(self):
+        return self.component.code
+
+    @cached_property
     def component_name(self):
         return self.component.name
 

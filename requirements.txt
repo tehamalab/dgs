@@ -6,6 +6,8 @@ psycopg2
 # configuration
 django-dotenv
 
+django-import-export
+
 # development
 django-debug-toolbar
 ipython

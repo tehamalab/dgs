@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    'import_export',
     'goals',
     'debug_toolbar',
 ]
@@ -142,3 +143,11 @@ STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'static_root'
 MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media_root'))
+
+# Site
+
+ADMIN_SITE_TITLE = os.environ.get('ADMIN_SITE_TITLE', 'SDGs Management')
+
+ADMIN_SITE_HEADER = os.environ.get('ADMIN_SITE_HEADER', 'SDGs')
+
+ADMIN_INDEX_TITLE = os.environ.get('ADMIN_INDEX_TITLE', 'Management')

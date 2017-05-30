@@ -27,3 +27,8 @@ if settings.DEBUG:
     urlpatterns = [
         url(r'^__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
+    
+admin.site.site_title = getattr(settings, 'ADMIN_SITE_TITLE', '')
+admin.site.site_header = getattr(settings, 'ADMIN_SITE_HEADER', '')
+admin.site.index_title = getattr(settings, 'ADMIN_INDEX_TITLE', '')
+
