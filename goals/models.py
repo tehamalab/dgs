@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.postgres.fields import HStoreField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify, truncatechars
+from django.utils.functional import cached_property
 
 
 class Goal(models.Model):
@@ -105,4 +106,12 @@ class Progress(models.Model):
         verbose_name_plural = _('Progress')
 
     def __str__(self):
-        return self.year + ':' + self.velue
+        return '%d:%d' %(self.year, self.value)
+
+    @cached_property
+    def component_name(self):
+        return self.component.name
+
+    @cached_property
+    def indicator_code(self):
+        return self.component.indicator.code
