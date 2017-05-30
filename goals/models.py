@@ -5,6 +5,36 @@ from django.template.defaultfilters import slugify, truncatechars
 from django.utils.functional import cached_property
 
 
+class Area(models.Model):
+    code = models.CharField(_('Area code'), max_length=10, unique=True)
+    name = models.CharField(_('Area name'), max_length=255)
+    type = models.CharField(_('Area type'), max_length=255)
+    description = models.TextField(_('Area description'), blank=True)
+    slug = models.SlugField(_('Slug'))
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Area')
+        verbose_name_plural = _('Areas')
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.get_slug()
+        super(Area, self).save(*args, **kwargs)
+
+    def get_slug(self):
+        if not self.slug:
+            slug = slugify(self.name[:50])
+            return slug
+        return self.slug
+
+
 class Goal(models.Model):
     code = models.CharField(_('Goal number'), max_length=10,
                             unique=True)
@@ -94,6 +124,8 @@ class Component(models.Model):
 class Progress(models.Model):
     component = models.ForeignKey(Component,
                                   verbose_name=_('Component'))
+    area = models.ForeignKey(Area, null=True, blank=True,
+                             verbose_name=_('Area'))
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
     value_unit = models.CharField(_('Value unit'), blank=True, max_length=50)

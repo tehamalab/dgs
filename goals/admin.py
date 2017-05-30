@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Goal, Indicator, Component, Progress
+from .models import Goal, Indicator, Component, Progress, Area
 
 
 class ProgressInline(admin.TabularInline):
@@ -43,7 +43,9 @@ class ProgressAdmin(ImportExportModelAdmin):
     list_select_related = ['component']
 
 
+admin.site.register(Area, ImportExportModelAdmin)
 admin.site.register(Goal, GoalAdmin)
 admin.site.register(Indicator, IndicatorAdmin)
 admin.site.register(Component, ComponentAdmin)
 admin.site.register(Progress, ProgressAdmin)
+
