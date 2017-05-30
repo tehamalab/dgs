@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import HStoreField
 from django.utils.translation import ugettext_lazy as _
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify, truncatechars
 
 
 class Goal(models.Model):
@@ -49,7 +49,8 @@ class Indicator(models.Model):
     target_description = models.TextField(_('Target description'),
                                   blank=True)
     stats_available = models.CharField(
-        _('Statistics are availble'), max_length=50, blank=True)
+        _('Statistics are availble'), max_length=50, blank=True,
+        choices=STATS_AVAILABLE_CHOICES)
     data_source = models.CharField(_('Data source'), max_length=255,
                                    blank=True)
     agency = models.CharField(_('Agency'), max_length=255, blank=True)
@@ -63,7 +64,8 @@ class Indicator(models.Model):
         verbose_name_plural = _('Indicators')
 
     def __str__(self):
-        return self.description
+        return '%s : %s' \
+            %(self.code, truncatechars(self.description, 50))
 
 
 class Component(models.Model):
