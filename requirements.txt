@@ -1,12 +1,18 @@
 django>=1.10
 
-# database
-psycopg2
-
 # configuration
 django-dotenv
 
+# database
+psycopg2
+
+# data
 django-import-export
+
+# api
+djangorestframework
+markdown
+django-filter
 
 # development
 django-debug-toolbar

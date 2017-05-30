@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'import_export',
+    'rest_framework',
     'goals',
     'debug_toolbar',
 ]
@@ -151,3 +152,11 @@ ADMIN_SITE_TITLE = os.environ.get('ADMIN_SITE_TITLE', 'SDGs Management')
 ADMIN_SITE_HEADER = os.environ.get('ADMIN_SITE_HEADER', 'SDGs')
 
 ADMIN_INDEX_TITLE = os.environ.get('ADMIN_INDEX_TITLE', 'Management')
+
+# API
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.ReadOnly',
+    ]
+}
