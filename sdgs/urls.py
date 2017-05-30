@@ -18,8 +18,14 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework import routers
 from goals.api import views as goals_views
+from .views import APIRootView
 
-router = routers.DefaultRouter()
+
+class DefaultRouter(routers.DefaultRouter):
+    APIRootView = APIRootView
+
+
+router = DefaultRouter()
 router.register(r'areas', goals_views.AreaViewSet)
 router.register(r'goals', goals_views.GoalViewSet)
 router.register(r'indicators', goals_views.IndicatorViewSet)
