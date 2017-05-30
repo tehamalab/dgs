@@ -157,6 +157,6 @@ ADMIN_INDEX_TITLE = os.environ.get('ADMIN_INDEX_TITLE', 'Management')
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.ReadOnly',
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ]
 }

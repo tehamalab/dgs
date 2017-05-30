@@ -16,11 +16,21 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
+from rest_framework import routers
+from goals.api import views as goals_views
+
+router = routers.DefaultRouter()
+router.register(r'areas', goals_views.AreaViewSet)
+router.register(r'goals', goals_views.GoalViewSet)
+router.register(r'indicators', goals_views.IndicatorViewSet)
+router.register(r'components', goals_views.ComponentViewSet)
+router.register(r'progress', goals_views.ProgressViewSet)
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/', include(router.urls)),
 ]
 
 if settings.DEBUG:
