@@ -68,7 +68,7 @@ ROOT_URLCONF = 'sdgs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'sdgs.context_processors.site',
             ],
         },
     },
@@ -146,6 +147,12 @@ MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media_root'))
 
 # Site
+
+SITE_NAME = os.environ.get('SITE_NAME', 'SDGs')
+
+SITE_API_NAME = os.environ.get('SITE_API_NAME', 'SDGs API')
+
+SITE_API_URL = os.environ.get('SITE_API_URL', '/api/')
 
 ADMIN_SITE_TITLE = os.environ.get('ADMIN_SITE_TITLE', 'SDGs Management')
 

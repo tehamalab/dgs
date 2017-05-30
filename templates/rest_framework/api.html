@@ -1,0 +1,8 @@
+{% extends "rest_framework/base.html" %}
+{% load staticfiles %}
+
+{% block title %}{% if name %}{{ name }} – {% endif %}{{ site_name }}{% endblock %}
+
+{% block branding %}
+    <a class='navbar-brand' href='{{ SITE_API_URL }}'>{{ SITE_API_NAME }}</a>
+{% endblock %}

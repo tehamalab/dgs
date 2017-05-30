@@ -1,0 +1,8 @@
+{% extends "rest_framework/login_base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Login' %} – {{ site_name }}{% endblock %}
+
+{% block branding %}
+    <h3 style="margin: 0 0 20px;">{{ site_name }}</h3>
+{% endblock %}
