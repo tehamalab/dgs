@@ -5,6 +5,11 @@ from .models import Goal, Indicator, Component, Progress, Area
 
 class ProgressInline(admin.TabularInline):
     model = Progress
+    exclude = ['slug']
+
+class ComponentInline(admin.TabularInline):
+    model = Component
+    exclude = ['slug']
 
 
 class GoalAdmin(ImportExportModelAdmin):
@@ -17,9 +22,10 @@ class GoalAdmin(ImportExportModelAdmin):
 class IndicatorAdmin(ImportExportModelAdmin):
     list_display = ['code', 'description']
     list_display_links = ['code', 'description']
-    list_filter = ['goal']
+    list_filter = ['goal', 'stats_available', 'agency', 'data_source']
     search_fields = ['code', 'description']
     ordering = ['id']
+    inlines = [ComponentInline]
 
 
 class ComponentAdmin(ImportExportModelAdmin):
