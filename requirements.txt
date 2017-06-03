@@ -17,6 +17,7 @@ django-imagekit
 djangorestframework
 markdown
 django-filter
+django-cors-headers
 
 # development
 django-debug-toolbar
