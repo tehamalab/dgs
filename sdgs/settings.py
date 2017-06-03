@@ -164,6 +164,12 @@ MEDIA_URL = os.environ.get('MEDIA_URL', '/media/')
 
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media_root'))
 
+# Imagekit
+
+IMAGEKIT_DEFAULT_CACHEFILE_BACKEND = os.environ.get('IMAGEKIT_DEFAULT_CACHEFILE_BACKEND', 'imagekit.cachefiles.backends.Simple')
+
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = os.environ.get('IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY', 'imagekit.cachefiles.strategies.Optimistic')
+
 # Site
 
 SITE_NAME = os.environ.get('SITE_NAME', 'SDGs')
