@@ -3,6 +3,8 @@ from django.contrib.postgres.fields import HStoreField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify, truncatechars
 from django.utils.functional import cached_property
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
 
 
 class Area(models.Model):
@@ -10,7 +12,21 @@ class Area(models.Model):
     name = models.CharField(_('Area name'), max_length=255)
     type = models.CharField(_('Area type'), max_length=255)
     description = models.TextField(_('Area description'), blank=True)
-    slug = models.SlugField(_('Slug'))
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/areas/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
@@ -40,7 +56,21 @@ class Goal(models.Model):
                             unique=True)
     name = models.CharField(_('Goal name'), max_length=255)
     description = models.TextField(_('Goal description'), blank=True)
-    slug = models.SlugField(_('Slug'))
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/goals/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
@@ -85,6 +115,20 @@ class Indicator(models.Model):
     data_source = models.CharField(_('Data source'), max_length=255,
                                    blank=True)
     agency = models.CharField(_('Agency'), max_length=255, blank=True)
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/indicators/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
@@ -107,7 +151,21 @@ class Component(models.Model):
     name = models.CharField(_('Component name'), max_length=255)
     description = models.TextField(_('Component description'),
                                   blank=True)
-    slug = models.SlugField(_('Slug'))
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/components/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
@@ -128,7 +186,8 @@ class Progress(models.Model):
                              verbose_name=_('Area'))
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
-    value_unit = models.CharField(_('Value unit'), blank=True, max_length=50)
+    value_unit = models.CharField(_('Value unit'), blank=True,
+                                  max_length=50)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)

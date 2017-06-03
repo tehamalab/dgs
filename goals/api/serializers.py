@@ -3,6 +3,9 @@ from ..models import Area, Goal, Indicator, Component, Progress
 
 
 class AreaSerializer(serializers.ModelSerializer):
+    image_small = serializers.ImageField(read_only=True)
+    image_medium = serializers.ImageField(read_only=True)
+    image_large = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Area
@@ -10,6 +13,9 @@ class AreaSerializer(serializers.ModelSerializer):
 
 
 class GoalSerializer(serializers.ModelSerializer):
+    image_small = serializers.ImageField(read_only=True)
+    image_medium = serializers.ImageField(read_only=True)
+    image_large = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Goal
@@ -17,6 +23,9 @@ class GoalSerializer(serializers.ModelSerializer):
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
+    image_small = serializers.ImageField(read_only=True)
+    image_medium = serializers.ImageField(read_only=True)
+    image_large = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Indicator
@@ -24,6 +33,9 @@ class IndicatorSerializer(serializers.ModelSerializer):
 
 
 class ComponentSerializer(serializers.ModelSerializer):
+    image_small = serializers.ImageField(read_only=True)
+    image_medium = serializers.ImageField(read_only=True)
+    image_large = serializers.ImageField(read_only=True)
 
     class Meta:
         model = Component

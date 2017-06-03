@@ -9,6 +9,10 @@ psycopg2
 # data
 django-import-export
 
+# media
+Pillow
+django-imagekit
+
 # api
 djangorestframework
 markdown
