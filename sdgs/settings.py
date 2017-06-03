@@ -103,6 +103,20 @@ DATABASES = {
     }
 }
 
+# Cache
+
+CACHES = {
+    "default": {
+        "BACKEND": os.environ.get('CACHE_DEFAULT_BACKEND', 'django_redis.cache.RedisCache'),
+        "LOCATION": os.environ.get('CACHE_DEFAULT_LOCATION', 'redis://localhost:6379/0'),
+        "TIMEOUT": int(os.environ.get('CACHE_DEFAULT_TIMEOUT', 300)),
+        "OPTIONS": {
+            "CLIENT_CLASS": os.environ.get('CACHE_DEFAULT_CLIENT_CLASS', 'django_redis.client.DefaultClient')
+        }
+    }
+}
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

@@ -6,6 +6,9 @@ django-dotenv
 # database
 psycopg2
 
+# cache
+django-redis
+
 # data
 django-import-export
 
