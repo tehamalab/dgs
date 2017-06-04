@@ -106,7 +106,8 @@ class Indicator(models.Model):
         (PARTIALLY, _('Partially')),
         (UNKNOWN, _('Unknown')),
     )
-    goal = models.ForeignKey(Goal, verbose_name=_('Goal'))
+    goal = models.ForeignKey(Goal, verbose_name=_('Goal'),
+                             related_name='indicators')
     code = models.CharField(_('Indicator number'), max_length=10,
                             unique=True)
     description = models.TextField(_('Indicator description'),
@@ -149,7 +150,8 @@ class Indicator(models.Model):
 
 class Component(models.Model):
     indicator = models.ForeignKey(Indicator,
-                                  verbose_name=_('Indicator'))
+                                  verbose_name=_('Indicator'),
+                                  related_name='components')
     code = models.CharField(_('Component number'), max_length=10,
                             unique=True)
     name = models.CharField(_('Component name'), max_length=255)
@@ -185,9 +187,11 @@ class Component(models.Model):
 
 class Progress(models.Model):
     component = models.ForeignKey(Component,
-                                  verbose_name=_('Component'))
+                                  verbose_name=_('Component'),
+                                  related_name='progress')
     area = models.ForeignKey(Area, null=True, blank=True,
-                             verbose_name=_('Area'))
+                             verbose_name=_('Area'),
+                             related_name='progress')
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
     value_unit = models.CharField(_('Value unit'), blank=True,
