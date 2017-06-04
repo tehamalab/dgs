@@ -98,9 +98,13 @@ class Goal(models.Model):
 class Indicator(models.Model):
     YES = 'YES'
     NO = 'NO'
+    PARTIALLY = 'PARTIALLY'
+    UNKNOWN = 'UNKNOWN'
     STATS_AVAILABLE_CHOICES = (
         (YES, _('Yes')),
         (NO, _('No')),
+        (PARTIALLY, _('Partially')),
+        (UNKNOWN, _('Unknown')),
     )
     goal = models.ForeignKey(Goal, verbose_name=_('Goal'))
     code = models.CharField(_('Indicator number'), max_length=10,
