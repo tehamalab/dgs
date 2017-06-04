@@ -114,7 +114,7 @@ class Indicator(models.Model):
     target_description = models.TextField(_('Target description'),
                                   blank=True)
     stats_available = models.CharField(
-        _('Statistics are availble'), max_length=50, blank=True,
+        _('Statistics availble'), max_length=50, blank=True,
         choices=STATS_AVAILABLE_CHOICES)
     data_source = models.CharField(_('Data source'), max_length=255,
                                    blank=True)
