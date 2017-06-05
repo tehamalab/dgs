@@ -116,7 +116,7 @@ class Indicator(models.Model):
                                   blank=True)
     stats_available = models.CharField(
         _('Statistics availble'), max_length=50, blank=True,
-        choices=STATS_AVAILABLE_CHOICES)
+        choices=STATS_AVAILABLE_CHOICES, default=UNKNOWN)
     data_source = models.CharField(_('Data source'), max_length=255,
                                    blank=True)
     agency = models.CharField(_('Agency'), max_length=255, blank=True)
