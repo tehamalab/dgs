@@ -43,29 +43,22 @@ class TargetFilter(django_filters.FilterSet):
 
 
 class IndicatorFilter(django_filters.FilterSet):
+    goal = django_filters.ModelChoiceFilter(name='target__goal',
+                                            queryset=Goal.objects.all())
     description = django_filters.CharFilter(lookup_expr='icontains')
-    target_description = django_filters.CharFilter(
-        lookup_expr='icontains')
     data_source = django_filters.CharFilter(lookup_expr='icontains')
     agency = django_filters.CharFilter(lookup_expr='iexact')
-    sort = django_filters.OrderingFilter(
-        fields=(
-            ('id', 'id'),
-            ('goal', 'goal'),
-            ('code', 'code'),
-            ('stats_available', 'stats_available'),
-        ))
 
     class Meta:
         model = Indicator
-        fields = ['goal', 'code', 'stats_available']
+        fields = ['target', 'code', 'stats_available']
 
 
 class ComponentFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
     description = django_filters.CharFilter(lookup_expr='icontains')
-    goal = django_filters.ModelChoiceFilter(name='indicator__goal',
-                                            queryset=Goal.objects.all())
+    goal = django_filters.ModelChoiceFilter(
+        name='indicator__target__goal', queryset=Goal.objects.all())
     sort = django_filters.OrderingFilter(
         fields=(
             ('id', 'id'),

@@ -30,7 +30,8 @@ class TargetAdmin(ImportExportModelAdmin):
 class IndicatorAdmin(ImportExportModelAdmin):
     list_display = ['code', 'description']
     list_display_links = ['code', 'description']
-    list_filter = ['goal', 'stats_available', 'agency', 'data_source']
+    list_filter = ['target__goal', 'stats_available', 'agency',
+                   'data_source']
     search_fields = ['code', 'description']
     ordering = ['id']
     inlines = [ComponentInline]
@@ -39,7 +40,7 @@ class IndicatorAdmin(ImportExportModelAdmin):
 class ComponentAdmin(ImportExportModelAdmin):
     list_display = ['code', 'name']
     list_display_links = ['code', 'name']
-    list_filter = ['indicator__goal']
+    list_filter = ['indicator__target__goal']
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ['code', 'name']
     ordering = ['id']

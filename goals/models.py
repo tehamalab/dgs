@@ -141,13 +141,11 @@ class Indicator(models.Model):
         (PARTIALLY, _('Partially')),
         (UNKNOWN, _('Unknown')),
     )
-    goal = models.ForeignKey(Goal, verbose_name=_('Goal'),
-                             related_name='indicators')
+    target = models.ForeignKey(Target, verbose_name=_('Target'),
+                               related_name='indicators')
     code = models.CharField(_('Indicator number'), max_length=10,
                             unique=True)
     description = models.TextField(_('Indicator description'),
-                                  blank=True)
-    target_description = models.TextField(_('Target description'),
                                   blank=True)
     stats_available = models.CharField(
         _('Statistics availble'), max_length=50, blank=True,

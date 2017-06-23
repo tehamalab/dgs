@@ -35,7 +35,7 @@ class IndicatorViewSet(viewsets.ModelViewSet):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorSerializer
     filter_class = IndicatorFilter
-    ordering_fields = ('id', 'code', 'goal', 'stats_available')
+    ordering_fields = ('id', 'code', 'stats_available')
     ordering = ('code',)
 
 
