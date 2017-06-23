@@ -16,7 +16,6 @@ class AreaFilter(django_filters.FilterSet):
     class Meta:
         model = Area
         fields = ['code']
-        
 
 
 class GoalFilter(django_filters.FilterSet):
