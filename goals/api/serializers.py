@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Area, Goal, Indicator, Component, Progress
+from ..models import Area, Goal, Target, Indicator, Component, Progress
 
 
 class AreaSerializer(serializers.ModelSerializer):
@@ -19,6 +19,16 @@ class GoalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goal
+        exclude = []
+
+
+class TargetSerializer(serializers.ModelSerializer):
+    image_small = serializers.ImageField(read_only=True)
+    image_medium = serializers.ImageField(read_only=True)
+    image_large = serializers.ImageField(read_only=True)
+
+    class Meta:
+        model = Target
         exclude = []
 
 

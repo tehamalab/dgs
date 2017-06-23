@@ -29,6 +29,7 @@ class DefaultRouter(routers.DefaultRouter):
 router = DefaultRouter()
 router.register(r'areas', goals_views.AreaViewSet)
 router.register(r'goals', goals_views.GoalViewSet)
+router.register(r'targets', goals_views.TargetViewSet)
 router.register(r'indicators', goals_views.IndicatorViewSet)
 router.register(r'components', goals_views.ComponentViewSet)
 router.register(r'progress', goals_views.ProgressViewSet)

@@ -1,5 +1,5 @@
 import django_filters
-from .models import Goal, Indicator, Component, Progress, Area
+from .models import Goal, Target, Indicator, Component, Progress, Area
 
 
 class AreaFilter(django_filters.FilterSet):
@@ -32,6 +32,14 @@ class GoalFilter(django_filters.FilterSet):
     class Meta:
         model = Goal
         fields = ['code']
+
+
+class TargetFilter(django_filters.FilterSet):
+    description = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = Target
+        fields = ['goal', 'code']
 
 
 class IndicatorFilter(django_filters.FilterSet):

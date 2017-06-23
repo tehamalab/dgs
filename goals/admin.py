@@ -1,6 +1,6 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .models import Goal, Indicator, Component, Progress, Area
+from .models import Goal, Target, Indicator, Component, Progress, Area
 
 
 class ProgressInline(admin.TabularInline):
@@ -16,6 +16,14 @@ class GoalAdmin(ImportExportModelAdmin):
     list_display = ['code', 'name', 'description']
     list_display_links = ['code', 'name']
     prepopulated_fields = {"slug": ("name",)}
+    ordering = ['id']
+
+
+class TargetAdmin(ImportExportModelAdmin):
+    list_display = ['code', 'description']
+    list_display_links = ['code', 'description']
+    list_filter = ['goal']
+    search_fields = ['code', 'description']
     ordering = ['id']
 
 
@@ -51,6 +59,7 @@ class ProgressAdmin(ImportExportModelAdmin):
 
 admin.site.register(Area, ImportExportModelAdmin)
 admin.site.register(Goal, GoalAdmin)
+admin.site.register(Target, TargetAdmin)
 admin.site.register(Indicator, IndicatorAdmin)
 admin.site.register(Component, ComponentAdmin)
 admin.site.register(Progress, ProgressAdmin)

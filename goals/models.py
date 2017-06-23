@@ -95,6 +95,41 @@ class Goal(models.Model):
         return self.slug
 
 
+class Target(models.Model):
+    goal = models.ForeignKey(Goal, verbose_name=_('Goal'),
+                             related_name='targets')
+    code = models.CharField(_('Target number'), max_length=10,
+                            unique=True)
+    description = models.TextField(_('Target description'),
+                                  blank=True)
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/targets/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Target')
+        verbose_name_plural = _('Targets')
+
+    def __str__(self):
+        return '%s : %s' \
+            %(self.code, truncatechars(self.description, 50))
+
+
 class Indicator(models.Model):
     YES = 'YES'
     NO = 'NO'
