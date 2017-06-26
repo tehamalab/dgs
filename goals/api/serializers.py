@@ -10,7 +10,7 @@ class AreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Area
-        exclude = []
+        exclude = ['tree_id']
 
 
 class PlanSerializer(serializers.ModelSerializer):

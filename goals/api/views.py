@@ -1,3 +1,5 @@
+from django.utils import timezone
+from django.template.defaultfilters import slugify
 from rest_framework import viewsets
 from .serializers import (AreaSerializer, PlanSerializer,
                           GoalSerializer, TargetSerializer,
@@ -9,7 +11,20 @@ from ..filters import (AreaFilter, PlanFilter, GoalFilter, TargetFilter,
                        IndicatorFilter, ComponentFilter, ProgressFilter)
 
 
-class AreaViewSet(viewsets.ModelViewSet):
+class ModelViewSet(viewsets.ModelViewSet):
+
+    def finalize_response(self, request, response, *args, **kwargs):
+        response = super(ModelViewSet, self).finalize_response(
+            request, response, *args, **kwargs)
+        filename = '%s-%s.csv' \
+            %(slugify(self.get_view_name()), timezone.now().isoformat())
+        if response.accepted_renderer.format == 'csv':
+            response['content-disposition'] = 'attachment; filename=%s'\
+                %filename
+        return response
+
+
+class AreaViewSet(ModelViewSet):
     queryset = Area.objects.all()
     serializer_class = AreaSerializer
     filter_class = AreaFilter
@@ -17,7 +32,7 @@ class AreaViewSet(viewsets.ModelViewSet):
     ordering = ('name',)
 
 
-class PlanViewSet(viewsets.ModelViewSet):
+class PlanViewSet(ModelViewSet):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
     filter_class = PlanFilter
@@ -25,7 +40,7 @@ class PlanViewSet(viewsets.ModelViewSet):
     ordering = ('id',)
 
 
-class GoalViewSet(viewsets.ModelViewSet):
+class GoalViewSet(ModelViewSet):
     queryset = Goal.objects.prefetch_related('plan')
     serializer_class = GoalSerializer
     filter_class = GoalFilter
@@ -33,7 +48,7 @@ class GoalViewSet(viewsets.ModelViewSet):
     ordering = ('id',)
 
 
-class TargetViewSet(viewsets.ModelViewSet):
+class TargetViewSet(ModelViewSet):
     queryset = Target.objects.all()
     serializer_class = TargetSerializer
     filter_class = TargetFilter
@@ -41,7 +56,7 @@ class TargetViewSet(viewsets.ModelViewSet):
     ordering = ('code',)
 
 
-class IndicatorViewSet(viewsets.ModelViewSet):
+class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorSerializer
     filter_class = IndicatorFilter
@@ -49,7 +64,7 @@ class IndicatorViewSet(viewsets.ModelViewSet):
     ordering = ('code',)
 
 
-class ComponentViewSet(viewsets.ModelViewSet):
+class ComponentViewSet(ModelViewSet):
     queryset = Component.objects.prefetch_related('progress',
                                                   'indicators')
     serializer_class = ComponentSerializer
@@ -59,7 +74,7 @@ class ComponentViewSet(viewsets.ModelViewSet):
     ordering = ('code',)
 
 
-class ProgressViewSet(viewsets.ModelViewSet):
+class ProgressViewSet(ModelViewSet):
     queryset = Progress.objects.all()
     serializer_class = ProgressSerializer
     filter_class = ProgressFilter

@@ -23,6 +23,7 @@ djangorestframework
 markdown
 django-filter
 django-cors-headers
+djangorestframework-csv
 
 # development
 django-debug-toolbar
