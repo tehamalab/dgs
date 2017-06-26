@@ -3,14 +3,17 @@ from django.contrib.postgres.fields import HStoreField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify, truncatechars
 from django.utils.functional import cached_property
+from mptt.models import MPTTModel, TreeForeignKey
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 
 
-class Area(models.Model):
+class Area(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True,
+                            related_name='children', db_index=True)
     code = models.CharField(_('Area code'), max_length=10, unique=True)
     name = models.CharField(_('Area name'), max_length=255)
-    type = models.CharField(_('Area type'), max_length=255)
+    type = models.CharField(_('Area type'), max_length=255, blank=True)
     description = models.TextField(_('Area description'), blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/areas/images',

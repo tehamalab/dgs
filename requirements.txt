@@ -6,6 +6,8 @@ django-dotenv
 # database
 psycopg2
 
+django-mptt
+
 # cache
 django-redis
 

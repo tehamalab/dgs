@@ -6,17 +6,10 @@ from .models import (Plan, Goal, Target, Indicator, Component, Progress,
 class AreaFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='iexact')
     type = django_filters.CharFilter(lookup_expr='iexact')
-    sort = django_filters.OrderingFilter(
-        fields=(
-            ('id', 'id'),
-            ('name', 'name'),
-            ('code', 'code'),
-            ('type', 'type'),
-        ))
 
     class Meta:
         model = Area
-        fields = ['code']
+        fields = ['code', 'level']
 
 
 class PlanFilter(django_filters.FilterSet):
