@@ -50,7 +50,8 @@ class IndicatorViewSet(viewsets.ModelViewSet):
 
 
 class ComponentViewSet(viewsets.ModelViewSet):
-    queryset = Component.objects.prefetch_related('progress')
+    queryset = Component.objects.prefetch_related('progress',
+                                                  'indicators')
     serializer_class = ComponentSerializer
     filter_class = ComponentFilter
     ordering_fields = ('id', 'code', 'indicator', 'created',

@@ -226,9 +226,9 @@ class Indicator(models.Model):
 
 
 class Component(models.Model):
-    indicator = models.ForeignKey(Indicator,
-                                  verbose_name=_('Indicator'),
-                                  related_name='components')
+    indicators = models.ManyToManyField('goals.Indicator',
+                                        verbose_name=_('Indicators'),
+                                        related_name='components')
     code = models.CharField(_('Component number'), max_length=10,
                             unique=True)
     name = models.CharField(_('Component name'), max_length=255)

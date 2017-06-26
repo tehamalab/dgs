@@ -59,19 +59,11 @@ class ComponentFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='icontains')
     description = django_filters.CharFilter(lookup_expr='icontains')
     goal = django_filters.ModelChoiceFilter(
-        name='indicator__target__goal', queryset=Goal.objects.all())
-    sort = django_filters.OrderingFilter(
-        fields=(
-            ('id', 'id'),
-            ('indicator', 'indicator'),
-            ('code', 'code'),
-            ('created', 'created'),
-            ('last_modified', 'last_modified'),
-        ))
+        name='indicators__target__goal', queryset=Goal.objects.all())
 
     class Meta:
         model = Component
-        fields = ['indicator', 'code']
+        fields = ['indicators', 'code']
 
 
 class ProgressFilter(django_filters.FilterSet):

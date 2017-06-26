@@ -9,8 +9,9 @@ class ProgressInline(admin.TabularInline):
     model = Progress
     exclude = ['slug']
 
+
 class ComponentInline(admin.TabularInline):
-    model = Component
+    model = Component.indicators.through
     exclude = ['slug']
 
 
@@ -50,9 +51,10 @@ class IndicatorAdmin(ImportExportModelAdmin):
 
 
 class ComponentAdmin(ImportExportModelAdmin):
+    filter_horizontal = ['indicators']
     list_display = ['code', 'name']
     list_display_links = ['code', 'name']
-    list_filter = ['indicator__target__goal']
+    list_filter = ['indicators__target__goal']
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ['code', 'name']
     ordering = ['id']
@@ -63,9 +65,9 @@ class ProgressAdmin(ImportExportModelAdmin):
     list_display = ['component_code', 'component_name', 'year', 'value',
                     'value_unit']
     list_display_links = ['component_name', 'year', 'value']
-    list_filter = ['year', 'component__indicator']
-    search_fields = ['component__indicator__code',
-                     'component__indicator__description']
+    list_filter = ['year', 'component__indicators']
+    search_fields = ['component__indicators__code',
+                     'component__indicators__description']
     ordering = ['id']
     list_select_related = ['component']
 
