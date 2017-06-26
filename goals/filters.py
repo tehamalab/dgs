@@ -67,15 +67,11 @@ class ComponentFilter(django_filters.FilterSet):
 
 
 class ProgressFilter(django_filters.FilterSet):
-    sort = django_filters.OrderingFilter(
-        fields=(
-            ('year', 'year'),
-            ('component', 'component'),
-            ('area', 'area'),
-            ('value', 'velue'),
-            ('created', 'created'),
-            ('last_modified', 'last_modified'),
-        ))
+    indicator = django_filters.ModelChoiceFilter(
+        name='component__indicators', queryset=Indicator.objects.all())
+    target = django_filters.ModelChoiceFilter(
+        name='component__indicators__target',
+        queryset=Target.objects.all())
 
     class Meta:
         model = Progress

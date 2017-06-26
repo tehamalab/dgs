@@ -64,7 +64,6 @@ class ComponentSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
-    progress = ProgressSerializer(many=True, read_only=True)
 
     class Meta:
         model = Component
