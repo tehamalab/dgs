@@ -1,5 +1,6 @@
 import django_filters
-from .models import Goal, Target, Indicator, Component, Progress, Area
+from .models import (Plan, Goal, Target, Indicator, Component, Progress,
+                     Area)
 
 
 class AreaFilter(django_filters.FilterSet):
@@ -15,6 +16,14 @@ class AreaFilter(django_filters.FilterSet):
 
     class Meta:
         model = Area
+        fields = ['code']
+
+
+class PlanFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='iexact')
+
+    class Meta:
+        model = Plan
         fields = ['code']
 
 

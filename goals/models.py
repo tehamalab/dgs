@@ -51,7 +51,48 @@ class Area(models.Model):
         return self.slug
 
 
+class Plan(models.Model):
+    code = models.CharField(_('code'), max_length=10,
+                            unique=True)
+    name = models.CharField(_('Name'), max_length=255)
+    description = models.TextField(_('Description'), blank=True)
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/goals/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Plan')
+        verbose_name_plural = _('Plans')
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.get_slug()
+        super(Plan, self).save(*args, **kwargs)
+
+
 class Goal(models.Model):
+    plan = models.ForeignKey('goals.Plan', verbose_name='plan',
+                             related_name='goals', blank=True,
+                             null=True)
     code = models.CharField(_('Goal number'), max_length=10,
                             unique=True)
     name = models.CharField(_('Goal name'), max_length=255)

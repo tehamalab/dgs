@@ -1,9 +1,11 @@
 from rest_framework import viewsets
-from .serializers import (AreaSerializer, GoalSerializer,
-                          TargetSerializer, IndicatorSerializer,
-                          ComponentSerializer, ProgressSerializer)
-from ..models import Area, Goal, Target, Indicator, Component, Progress
-from ..filters import (AreaFilter, GoalFilter, TargetFilter,
+from .serializers import (AreaSerializer, PlanSerializer,
+                          GoalSerializer, TargetSerializer,
+                          IndicatorSerializer, ComponentSerializer,
+                          ProgressSerializer)
+from ..models import (Area, Plan, Goal, Target, Indicator, Component,
+                      Progress)
+from ..filters import (AreaFilter, PlanFilter, GoalFilter, TargetFilter,
                        IndicatorFilter, ComponentFilter, ProgressFilter)
 
 
@@ -15,8 +17,16 @@ class AreaViewSet(viewsets.ModelViewSet):
     ordering = ('name',)
 
 
+class PlanViewSet(viewsets.ModelViewSet):
+    queryset = Plan.objects.all()
+    serializer_class = PlanSerializer
+    filter_class = PlanFilter
+    ordering_fields = ('id', 'code', 'name')
+    ordering = ('id',)
+
+
 class GoalViewSet(viewsets.ModelViewSet):
-    queryset = Goal.objects.all()
+    queryset = Goal.objects.prefetch_related('plan')
     serializer_class = GoalSerializer
     filter_class = GoalFilter
     ordering_fields = ('id', 'code', 'name')
