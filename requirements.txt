@@ -7,6 +7,7 @@ django-dotenv
 psycopg2
 
 django-mptt
+django-modeltranslation
 
 # cache
 django-redis

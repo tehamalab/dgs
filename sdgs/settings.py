@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'mptt',
     'import_export',
+    'modeltranslation',
     'rest_framework',
     'django_filters',
     'corsheaders',
@@ -141,7 +142,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE', 'en-us')
+LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE', 'en')
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = LANGUAGE_CODE
+
+gettext = lambda s: s
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('sw', gettext('Kiswahili')),
+)
+
+if os.environ.get('LANGUAGES',''):
+    LANGUAGES = []
+    for lang in os.environ.get('LANGUAGES','').split(';'):
+        LANGUAGES.append([i.strip() for i in lang.split(':')])
+
 
 TIME_ZONE = os.environ.get('TIME_ZONE', 'Africa/Dar_es_Salaam')
 
