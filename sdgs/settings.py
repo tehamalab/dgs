@@ -157,6 +157,9 @@ if os.environ.get('LANGUAGES',''):
     for lang in os.environ.get('LANGUAGES','').split(';'):
         LANGUAGES.append([i.strip() for i in lang.split(':')])
 
+LOCALE_PATHS = [
+    'locale',
+]
 
 TIME_ZONE = os.environ.get('TIME_ZONE', 'Africa/Dar_es_Salaam')
 
