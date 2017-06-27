@@ -3,6 +3,7 @@ from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
 from .models import (Plan, Goal, Target, Indicator, Component, Progress,
                      Area)
+from .resources import GoalResource, TargetResource, IndicatorResource
 
 
 class ProgressInline(admin.TabularInline):
@@ -26,6 +27,7 @@ class PlanAdmin(ImportExportModelAdmin):
 
 
 class GoalAdmin(ImportExportModelAdmin):
+    resource_class = GoalResource
     list_display = ['code', 'name', 'description']
     list_display_links = ['code', 'name']
     prepopulated_fields = {"slug": ("name",)}
@@ -33,6 +35,7 @@ class GoalAdmin(ImportExportModelAdmin):
 
 
 class TargetAdmin(ImportExportModelAdmin):
+    resource_class = TargetResource
     list_display = ['code', 'description']
     list_display_links = ['code', 'description']
     list_filter = ['goal']
@@ -41,6 +44,7 @@ class TargetAdmin(ImportExportModelAdmin):
 
 
 class IndicatorAdmin(ImportExportModelAdmin):
+    resource_class = IndicatorResource
     list_display = ['code', 'description']
     list_display_links = ['code', 'description']
     list_filter = ['target__goal', 'stats_available', 'agency',
