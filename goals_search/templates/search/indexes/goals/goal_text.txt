@@ -1,0 +1,5 @@
+{{ object.name }}
+{{ object.code }}
+{{ object.description }}
+
+{{ object.plan_name }}

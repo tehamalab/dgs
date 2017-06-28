@@ -9,6 +9,12 @@ psycopg2
 django-mptt
 django-modeltranslation
 
+# search
+django-haystack
+git+ssh://git@github.com/machakux/haystack-elasticsearch5.git
+elasticsearch
+certifi
+
 # cache
 django-redis
 

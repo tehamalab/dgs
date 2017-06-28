@@ -1,0 +1,6 @@
+{{ object.name }}
+{{ object.code }}
+{{ object.description }}
+
+{{ object.plan_name }}
+{{ object.goal_name }}

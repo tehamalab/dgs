@@ -49,11 +49,13 @@ INSTALLED_APPS = [
     'mptt',
     'import_export',
     'modeltranslation',
+    'haystack',
     'rest_framework',
     'django_filters',
     'corsheaders',
     'imagekit',
     'goals',
+    'goals_search',
     'debug_toolbar',
 ]
 
@@ -104,6 +106,34 @@ DATABASES = {
         'CONN_MAX_AGE': int(os.environ.get('DATABASE_CONN_MAX_AGE', 0))
     }
 }
+
+# Haystack
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': os.environ.get('HAYSTACK_DEFAULT_ENGINE', 'haystack_elasticsearch5.Elasticsearch5SearchEngine'),
+        'URL': os.environ.get('HAYSTACK_DEFAULT_URL', 'http://127.0.0.1:9200/'),
+        'INDEX_NAME': os.environ.get('HAYSTACK_DEFAULT_INDEX_NAME', 'dgs'),
+        'INCLUDE_SPELLING': bool(os.environ.get('HAYSTACK_DEFAULT_INCLUDE_SPELLING', True)),
+        'KWARGS': {}
+    },
+}
+
+haystack_default_http_auth = os.environ.get('HAYSTACK_DEFAULT_HTTP_AUTH', '').split()
+if len(haystack_default_http_auth) >= 2:
+    HAYSTACK_CONNECTIONS['default']['KWARGS']['http_auth'] = haystack_default_http_auth[:2]
+
+haystack_default_use_ssl = bool(os.environ.get('HAYSTACK_DEFAULT_USE_SSL', False))
+if haystack_default_use_ssl:
+    HAYSTACK_CONNECTIONS['default']['KWARGS']['use_ssl'] = haystack_default_use_ssl
+    HAYSTACK_CONNECTIONS['default']['KWARGS']['verify_certs'] = bool(os.environ.get('HAYSTACK_DEFAULT_VERIFY_CERTS', True))
+
+haystack_default_connection_class = os.environ.get('HAYSTACK_DEFAULT_CONNECTION_CLASS', '')
+if haystack_default_connection_class:
+    HAYSTACK_CONNECTIONS['default']['KWARGS']['connection_class'] = haystack_default_connection_class
+
+HAYSTACK_SIGNAL_PROCESSOR = os.environ.get('HAYSTACK_SIGNAL_PROCESSOR', 'haystack.signals.RealtimeSignalProcessor')
+
+HAYSTACK_DEFAULT_OPERATOR = os.environ.get('HAYSTACK_DEFAULT_OPERATOR', 'OR')
 
 # Cache
 

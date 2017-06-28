@@ -1,0 +1,8 @@
+{{ object.name }}
+{{ object.code }}
+{{ object.description }}
+
+{{ object.plans_names|join:", " }}
+{{ object.goals_names|join:", " }}
+{{ object.targets_names|join:", " }}
+{{ object.indicators_names|join:", " }}
