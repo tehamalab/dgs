@@ -52,7 +52,7 @@ class IndicatorFilter(django_filters.FilterSet):
 
     class Meta:
         model = Indicator
-        fields = ['target', 'code', 'stats_available']
+        fields = ['target', 'code']
 
 
 class ComponentFilter(django_filters.FilterSet):
@@ -63,7 +63,7 @@ class ComponentFilter(django_filters.FilterSet):
 
     class Meta:
         model = Component
-        fields = ['indicators', 'code']
+        fields = ['indicators', 'code', 'stats_available']
 
 
 class ProgressFilter(django_filters.FilterSet):

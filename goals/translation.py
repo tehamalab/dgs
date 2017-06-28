@@ -19,4 +19,9 @@ class TargetTranslationOptions(TranslationOptions):
 
 @register(Indicator)
 class IndicatorTranslationOptions(TranslationOptions):
-    fields = ('description', 'data_source', 'agency', 'image')
+    fields = ('description', 'image')
+
+
+@register(Component)
+class ComponentTranslationOptions(TranslationOptions):
+    fields = ('description', 'image', 'agency', 'data_source')

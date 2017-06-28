@@ -47,8 +47,6 @@ class IndicatorAdmin(ImportExportModelAdmin):
     resource_class = IndicatorResource
     list_display = ['code', 'description']
     list_display_links = ['code', 'description']
-    list_filter = ['target__goal', 'stats_available', 'agency',
-                   'data_source']
     search_fields = ['code', 'description']
     ordering = ['id']
     inlines = [ComponentInline]
@@ -58,7 +56,8 @@ class ComponentAdmin(ImportExportModelAdmin):
     filter_horizontal = ['indicators']
     list_display = ['code', 'name']
     list_display_links = ['code', 'name']
-    list_filter = ['indicators__target__goal']
+    list_filter = ['indicators__target__goal', 'stats_available',
+                   'agency', 'data_source']
     prepopulated_fields = {"slug": ("name",)}
     search_fields = ['code', 'name']
     ordering = ['id']
