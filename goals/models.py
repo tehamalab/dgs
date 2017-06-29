@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from django.contrib.postgres.fields import HStoreField
 from django.utils.translation import ugettext_lazy as _
@@ -466,17 +467,17 @@ class Component(models.Model):
             self.slug = self.get_slug()
         indctrs = self.indicators\
             .prefetch_related('target', 'target__goal', 'target__goal__plan')
-        self.extras['indicators_codes'] = [i.code for i in indctrs]
-        self.extras['indicators_names'] = [i.name for i in indctrs]
-        self.extras['targets_ids'] = [i.target.id for i in indctrs]
-        self.extras['targets_codes'] = [i.target.code for i in indctrs]
-        self.extras['targets_names'] = [i.target.name for i in indctrs]
-        self.extras['goals_ids'] = [i.target.goal.id for i in indctrs]
-        self.extras['goals_codes'] = [i.target.goal.code for i in indctrs]
-        self.extras['goals_names'] = [i.target.goal.name for i in indctrs]
-        self.extras['plans_ids'] = [i.target.goal.plan.id for i in indctrs]
-        self.extras['plans_codes'] = [i.target.goal.plan.code for i in indctrs]
-        self.extras['plans_names'] = [i.target.goal.plan.name for i in indctrs]
+        self.extras['indicators_codes'] = json.dumps([i.code for i in indctrs])
+        self.extras['indicators_names'] = json.dumps([i.name for i in indctrs])
+        self.extras['targets_ids'] = json.dumps([i.target.id for i in indctrs])
+        self.extras['targets_codes'] = json.dumps([i.target.code for i in indctrs])
+        self.extras['targets_names'] = json.dumps([i.target.name for i in indctrs])
+        self.extras['goals_ids'] = json.dumps([i.target.goal.id for i in indctrs])
+        self.extras['goals_codes'] = json.dumps([i.target.goal.code for i in indctrs])
+        self.extras['goals_names'] = json.dumps([i.target.goal.name for i in indctrs])
+        self.extras['plans_ids'] = json.dumps([i.target.goal.plan.id for i in indctrs])
+        self.extras['plans_codes'] = json.dumps([i.target.goal.plan.code for i in indctrs])
+        self.extras['plans_names'] = json.dumps([i.target.goal.plan.name for i in indctrs])
         super(Component, self).save(*args, **kwargs)
 
     def get_slug(self):
@@ -507,49 +508,49 @@ class Component(models.Model):
 
     @cached_property
     def indicators_codes(self):
-        return self.extras.get('indicators_codes', '') \
+        return json.loads(self.extras.get('indicators_codes', '[]')) \
             or list(self.indicators.values_list('code', flat=True))
 
     @cached_property
     def indicators_names(self):
-        return self.extras.get('indicators_names', '') \
+        return json.loads(self.extras.get('indicators_names', '[]')) \
             or list(self.indicators.values_list('name', flat=True))
 
     @cached_property
     def targets_ids(self):
-        return self.extras.get('targets_ids', [])
+        return json.loads(self.extras.get('targets_ids', '[]'))
 
     @cached_property
     def targets_codes(self):
-        return self.extras.get('targets_codes', [])
+        return json.loads(self.extras.get('targets_codes', '[]'))
 
     @cached_property
     def targets_names(self):
-        return self.extras.get('targets_names', [])
+        return json.loads(self.extras.get('targets_names', '[]'))
 
     @cached_property
     def goals_ids(self):
-        return self.extras.get('goals_ids', [])
+        return json.loads(self.extras.get('goals_ids', '[]'))
 
     @cached_property
     def goals_codes(self):
-        return self.extras.get('goals_codes', [])
+        return json.loads(self.extras.get('goals_codes', '[]'))
 
     @cached_property
     def goals_names(self):
-        return self.extras.get('goals_names', [])
+        return json.loads(self.extras.get('goals_names', '[]'))
 
     @cached_property
     def plans_ids(self):
-        return self.extras.get('plans_ids', [])
+        return json.loads(self.extras.get('plans_ids', '[]'))
 
     @cached_property
     def plans_codes(self):
-        return self.extras.get('plans_codes', [])
+        return json.loads(self.extras.get('plans_codes', '[]'))
 
     @cached_property
     def plans_names(self):
-        return self.extras.get('plans_names', [])
+        return json.loads(self.extras.get('plans_names', '[]'))
 
 
 class Progress(models.Model):
