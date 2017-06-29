@@ -14,14 +14,14 @@ class GoalTranslationOptions(TranslationOptions):
 
 @register(Target)
 class TargetTranslationOptions(TranslationOptions):
-    fields = ('description', 'image')
+    fields = ('name', 'description', 'image')
 
 
 @register(Indicator)
 class IndicatorTranslationOptions(TranslationOptions):
-    fields = ('description', 'image')
+    fields = ('name', 'description', 'image')
 
 
 @register(Component)
 class ComponentTranslationOptions(TranslationOptions):
-    fields = ('description', 'image', 'agency', 'data_source')
+    fields = ('name', 'description', 'image', 'agency', 'data_source')
