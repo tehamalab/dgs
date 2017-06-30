@@ -23,16 +23,11 @@ class PlanFilter(django_filters.FilterSet):
 class GoalFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='iexact')
     description = django_filters.CharFilter(lookup_expr='icontains')
-    sort = django_filters.OrderingFilter(
-        fields=(
-            ('id', 'id'),
-            ('name', 'name'),
-            ('code', 'code'),
-        ))
+    plan_code = django_filters.CharFilter(name='plan__code')
 
     class Meta:
         model = Goal
-        fields = ['code']
+        fields = ['plan', 'code']
 
 
 class TargetFilter(django_filters.FilterSet):
