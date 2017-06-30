@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-27 12:07+0300\n"
+"POT-Creation-Date: 2017-06-30 10:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,204 +18,204 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: goals/models.py:14
-msgid "Area code"
-msgstr ""
-
-#: goals/models.py:15
-msgid "Area name"
-msgstr ""
-
-#: goals/models.py:16
-msgid "Area type"
-msgstr ""
-
-#: goals/models.py:17
-msgid "Area description"
-msgstr ""
-
-#: goals/models.py:18 goals/models.py:62 goals/models.py:103
-#: goals/models.py:149 goals/models.py:200 goals/models.py:237
-msgid "Image"
-msgstr ""
-
-#: goals/models.py:32 goals/models.py:76 goals/models.py:117
-#: goals/models.py:255
-msgid "Slug"
-msgstr ""
-
-#: goals/models.py:33 goals/models.py:77 goals/models.py:118
-#: goals/models.py:163 goals/models.py:214 goals/models.py:256
-#: goals/models.py:278
-msgid "Created"
-msgstr ""
-
-#: goals/models.py:34 goals/models.py:78 goals/models.py:119
-#: goals/models.py:164 goals/models.py:215 goals/models.py:257
-#: goals/models.py:279
-msgid "Last modified"
-msgstr ""
-
-#: goals/models.py:36 goals/models.py:80 goals/models.py:121
-#: goals/models.py:166 goals/models.py:217 goals/models.py:259
-#: goals/models.py:281
-msgid "Extras"
-msgstr ""
-
-#: goals/models.py:39 goals/models.py:274
-msgid "Area"
-msgstr ""
-
-#: goals/models.py:40
-msgid "Areas"
-msgstr ""
-
-#: goals/models.py:58
-msgid "code"
-msgstr ""
-
-#: goals/models.py:60
-msgid "Name"
-msgstr ""
-
-#: goals/models.py:61
-msgid "Description"
-msgstr ""
-
-#: goals/models.py:83
-msgid "Plan"
-msgstr ""
-
-#: goals/models.py:84
-msgid "Plans"
-msgstr ""
-
-#: goals/models.py:99
-msgid "Goal number"
-msgstr ""
-
-#: goals/models.py:101
-msgid "Goal name"
-msgstr ""
-
-#: goals/models.py:102
-msgid "Goal description"
-msgstr ""
-
-#: goals/models.py:124 goals/models.py:143
-msgid "Goal"
-msgstr ""
-
-#: goals/models.py:125
-msgid "Goals"
-msgstr ""
-
-#: goals/models.py:145
-msgid "Target number"
-msgstr ""
-
-#: goals/models.py:147
-msgid "Target description"
-msgstr ""
-
-#: goals/models.py:169 goals/models.py:188
-msgid "Target"
-msgstr ""
-
-#: goals/models.py:170
-msgid "Targets"
-msgstr ""
-
-#: goals/models.py:183
-msgid "Yes"
-msgstr ""
-
-#: goals/models.py:184
-msgid "No"
-msgstr ""
-
-#: goals/models.py:185
-msgid "Partially"
-msgstr ""
-
-#: goals/models.py:186
-msgid "Unknown"
-msgstr ""
-
-#: goals/models.py:190
-msgid "Indicator number"
-msgstr ""
-
-#: goals/models.py:192
-msgid "Indicator description"
-msgstr ""
-
-#: goals/models.py:195
-msgid "Statistics availble"
-msgstr ""
-
-#: goals/models.py:197
-msgid "Data source"
-msgstr ""
-
-#: goals/models.py:199
-msgid "Agency"
-msgstr ""
-
-#: goals/models.py:220
-msgid "Indicator"
-msgstr ""
-
-#: goals/models.py:221 goals/models.py:230
-msgid "Indicators"
-msgstr ""
-
-#: goals/models.py:232
-msgid "Component number"
-msgstr ""
-
-#: goals/models.py:234
-msgid "Component name"
-msgstr ""
-
-#: goals/models.py:235
-msgid "Component description"
-msgstr ""
-
-#: goals/models.py:251
-msgid "Target value"
-msgstr ""
-
-#: goals/models.py:253
-msgid "Value unit"
-msgstr ""
-
-#: goals/models.py:262 goals/models.py:271
-msgid "Component"
-msgstr ""
-
-#: goals/models.py:263
-msgid "Components"
-msgstr ""
-
-#: goals/models.py:276
-msgid "Year"
-msgstr ""
-
-#: goals/models.py:277
-msgid "Value"
-msgstr ""
-
-#: goals/models.py:284 goals/models.py:285
-msgid "Progress"
-msgstr ""
-
-#: sdgs/settings.py:151
+#: dgs/settings.py:181
 msgid "English"
 msgstr ""
 
-#: sdgs/settings.py:152
+#: dgs/settings.py:182
 msgid "Kiswahili"
+msgstr ""
+
+#: goals/models.py:16
+msgid "Area code"
+msgstr ""
+
+#: goals/models.py:17
+msgid "Area name"
+msgstr ""
+
+#: goals/models.py:18
+msgid "Area type"
+msgstr ""
+
+#: goals/models.py:19
+msgid "Area description"
+msgstr ""
+
+#: goals/models.py:20 goals/models.py:73 goals/models.py:148
+#: goals/models.py:239 goals/models.py:345 goals/models.py:481
+msgid "Image"
+msgstr ""
+
+#: goals/models.py:34 goals/models.py:87 goals/models.py:162
+#: goals/models.py:253 goals/models.py:359 goals/models.py:505
+msgid "Slug"
+msgstr ""
+
+#: goals/models.py:35 goals/models.py:88 goals/models.py:163
+#: goals/models.py:254 goals/models.py:360 goals/models.py:506
+#: goals/models.py:627
+msgid "Created"
+msgstr ""
+
+#: goals/models.py:36 goals/models.py:89 goals/models.py:164
+#: goals/models.py:255 goals/models.py:361 goals/models.py:507
+#: goals/models.py:628
+msgid "Last modified"
+msgstr ""
+
+#: goals/models.py:38 goals/models.py:91 goals/models.py:166
+#: goals/models.py:257 goals/models.py:363 goals/models.py:509
+#: goals/models.py:630
+msgid "Extras"
+msgstr ""
+
+#: goals/models.py:41 goals/models.py:623
+msgid "Area"
+msgstr ""
+
+#: goals/models.py:42
+msgid "Areas"
+msgstr ""
+
+#: goals/models.py:69
+msgid "code"
+msgstr ""
+
+#: goals/models.py:71
+msgid "Name"
+msgstr ""
+
+#: goals/models.py:72
+msgid "Description"
+msgstr ""
+
+#: goals/models.py:94
+msgid "Plan"
+msgstr ""
+
+#: goals/models.py:95
+msgid "Plans"
+msgstr ""
+
+#: goals/models.py:144
+msgid "Goal number"
+msgstr ""
+
+#: goals/models.py:146
+msgid "Goal name"
+msgstr ""
+
+#: goals/models.py:147
+msgid "Goal description"
+msgstr ""
+
+#: goals/models.py:169 goals/models.py:232
+msgid "Goal"
+msgstr ""
+
+#: goals/models.py:170
+msgid "Goals"
+msgstr ""
+
+#: goals/models.py:234
+msgid "Target number"
+msgstr ""
+
+#: goals/models.py:236 goals/models.py:260 goals/models.py:338
+msgid "Target"
+msgstr ""
+
+#: goals/models.py:237
+msgid "Target description"
+msgstr ""
+
+#: goals/models.py:261
+msgid "Targets"
+msgstr ""
+
+#: goals/models.py:340 goals/models.py:366
+msgid "Indicator"
+msgstr ""
+
+#: goals/models.py:341
+msgid "Indicator number"
+msgstr ""
+
+#: goals/models.py:343
+msgid "Indicator description"
+msgstr ""
+
+#: goals/models.py:367 goals/models.py:474
+msgid "Indicators"
+msgstr ""
+
+#: goals/models.py:468
+msgid "Yes"
+msgstr ""
+
+#: goals/models.py:469
+msgid "No"
+msgstr ""
+
+#: goals/models.py:470
+msgid "Partially"
+msgstr ""
+
+#: goals/models.py:471
+msgid "Unknown"
+msgstr ""
+
+#: goals/models.py:476
+msgid "Component number"
+msgstr ""
+
+#: goals/models.py:478
+msgid "Component name"
+msgstr ""
+
+#: goals/models.py:479
+msgid "Component description"
+msgstr ""
+
+#: goals/models.py:495
+msgid "Target value"
+msgstr ""
+
+#: goals/models.py:497
+msgid "Value unit"
+msgstr ""
+
+#: goals/models.py:500
+msgid "Statistics availble"
+msgstr ""
+
+#: goals/models.py:502
+msgid "Data source"
+msgstr ""
+
+#: goals/models.py:504
+msgid "Agency"
+msgstr ""
+
+#: goals/models.py:512 goals/models.py:620
+msgid "Component"
+msgstr ""
+
+#: goals/models.py:513
+msgid "Components"
+msgstr ""
+
+#: goals/models.py:625
+msgid "Year"
+msgstr ""
+
+#: goals/models.py:626
+msgid "Value"
+msgstr ""
+
+#: goals/models.py:633 goals/models.py:634
+msgid "Progress"
 msgstr ""
 
 #: templates/rest_framework/login.html:4
