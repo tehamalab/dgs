@@ -133,7 +133,7 @@ if haystack_default_connection_class:
 
 HAYSTACK_SIGNAL_PROCESSOR = os.environ.get('HAYSTACK_SIGNAL_PROCESSOR', 'haystack.signals.RealtimeSignalProcessor')
 
-HAYSTACK_DEFAULT_OPERATOR = os.environ.get('HAYSTACK_DEFAULT_OPERATOR', 'OR')
+HAYSTACK_DEFAULT_OPERATOR = os.environ.get('HAYSTACK_DEFAULT_OPERATOR', 'AND')
 
 # Cache
 

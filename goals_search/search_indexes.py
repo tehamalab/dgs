@@ -21,16 +21,21 @@ class PlanIndex(indexes.SearchIndex, indexes.Indexable):
                                      null=True)
     image_large = indexes.CharField(model_attr='image_large_url',
                                     null=True)
+    api_url = indexes.CharField(model_attr='api_url', null=True)
     extras = indexes.DictField(model_attr='extras', null=True)
     created = indexes.DateTimeField(model_attr='created', null=True)
     last_modified = indexes.DateTimeField(model_attr='last_modified',
                                           null=True)
+    object_type = indexes.CharField(faceted=True, null=True)
 
     def get_model(self):
         return Plan
 
     def get_updated_field(self):
         return 'last_modified'
+
+    def prepare_object_type(self, obj):
+        return self.get_model().__name__.lower()
 
 
 class GoalIndex(PlanIndex):

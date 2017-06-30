@@ -4,6 +4,7 @@ from django.contrib.postgres.fields import HStoreField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify, truncatechars
 from django.utils.functional import cached_property
+from django.core.urlresolvers import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
@@ -54,6 +55,15 @@ class Area(MPTTModel):
             return slug
         return self.slug
 
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('area-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
+
 
 class Plan(models.Model):
     code = models.CharField(_('code'), max_length=10,
@@ -91,6 +101,21 @@ class Plan(models.Model):
         if not self.slug:
             self.slug = self.get_slug()
         super(Plan, self).save(*args, **kwargs)
+
+    def get_slug(self):
+        if not self.slug:
+            slug = slugify(self.name[:50])
+            return slug
+        return self.slug
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('plan-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
 
     @cached_property
     def image_url(self):
@@ -154,11 +179,21 @@ class Goal(models.Model):
         self.extras['plan_code'] = self.plan.code
         super(Goal, self).save(*args, **kwargs)
 
+
     def get_slug(self):
         if not self.slug:
             slug = slugify(self.name[:50])
             return slug
         return self.slug
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('goal-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
 
     @cached_property
     def image_url(self):
@@ -244,6 +279,15 @@ class Target(models.Model):
             slug = slugify(self.name[:50])
             return slug
         return self.slug
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('target-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
 
     @cached_property
     def image_url(self):
@@ -344,6 +388,15 @@ class Indicator(models.Model):
             slug = slugify(self.name[:50])
             return slug
         return self.slug
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('indicator-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
 
     @cached_property
     def image_url(self):
@@ -487,6 +540,15 @@ class Component(models.Model):
         return self.slug
 
     @cached_property
+    def api_url(self):
+        try:
+            return reverse('component-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
+
+    @cached_property
     def image_url(self):
         if self.image:
             return self.image.url
@@ -573,6 +635,15 @@ class Progress(models.Model):
 
     def __str__(self):
         return '%d:%d' %(self.year, self.value)
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('progress-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
 
     @cached_property
     def component_code(self):

@@ -31,6 +31,7 @@ markdown
 django-filter
 django-cors-headers
 djangorestframework-csv
+drf-haystack
 
 # development
 django-debug-toolbar
