@@ -6,17 +6,44 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-class Migration(migrations.Migration):
+def add_target_if_there_is_none(apps, schema_editor):
+    """If there is an existing indicator but no target add a dummy one
+    """
+    from django.db import connection
+    with connection.cursor() as cursor:
+        cursor.execute('SELECT (1) AS "a" FROM "goals_indicator" LIMIT 1')
+        indicator_exists = cursor.fetchone()
+        if indicator_exists:
+            cursor.execute('SELECT (1) AS "a" FROM "goals_target" LIMIT 1')
+            target_exists = cursor.fetchone()
+            if not target_exists:
+                insert_target = """INSERT INTO goals_target (id, goal_id, code, description, created, last_modified) 
+                    VALUES (1, 1, 'dummy', '', '2017-06-30T20:19:29.786604+00:00'::timestamptz, '2017-06-30T20:19:29.786604+00:00'::timestamptz);"""
+                cursor.execute(insert_target)
 
+
+def get_target():
+    from django.apps import apps
+    Target = apps.get_model('goals', 'Target')
+    targets = Target.objects.raw('SELECT id, code FROM goals_target ORDER BY id')
+    return targets[0]
+
+
+def dummy(apps, schema_editor):
+    pass
+
+
+class Migration(migrations.Migration):
     dependencies = [
         ('goals', '0015_remove_fields_goal_and_target_description_from_indicator'),
     ]
 
     operations = [
+        migrations.RunPython(add_target_if_there_is_none, reverse_code=dummy),
         migrations.AlterField(
             model_name='indicator',
             name='target',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='indicators', to='goals.Target', verbose_name='Target'),
+            field=models.ForeignKey(default=get_target(), on_delete=django.db.models.deletion.CASCADE, related_name='indicators', to='goals.Target', verbose_name='Target'),
             preserve_default=False,
         ),
     ]
