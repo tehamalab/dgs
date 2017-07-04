@@ -217,15 +217,11 @@ class Goal(models.Model):
 
     @cached_property
     def plan_name(self):
-        if self.plan:
-            return self.extras.get('plan_name', '') or self.plan.name
-        return ''
+        return self.extras.get('plan_name', '') or self.plan.name
 
     @cached_property
     def plan_code(self):
-        if self.plan:
-            return self.extras.get('plan_code', '') or self.plan.code
-        return ''
+        return self.extras.get('plan_code', '') or self.plan.code
 
 
 class Target(models.Model):
@@ -323,7 +319,7 @@ class Target(models.Model):
 
     @cached_property
     def plan_id(self):
-        return int(self.extras.get('plan_id', '')) or self.goal.plan_id
+        return int(self.extras.get('plan_id', '0')) or self.goal.plan_id
 
     @cached_property
     def plan_code(self):
@@ -432,7 +428,7 @@ class Indicator(models.Model):
 
     @cached_property
     def goal_id(self):
-        return int(self.extras.get('goal_id', '')) or self.goal.id
+        return int(self.extras.get('goal_id', '0')) or self.goal.id
 
     @cached_property
     def goal_code(self):
@@ -448,7 +444,7 @@ class Indicator(models.Model):
 
     @cached_property
     def plan_id(self):
-        return int(self.extras.get('plan_id', '')) or self.goal.plan_id
+        return int(self.extras.get('plan_id', '0')) or self.goal.plan_id
 
     @cached_property
     def plan_code(self):
