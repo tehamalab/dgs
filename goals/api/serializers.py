@@ -17,54 +17,96 @@ class PlanSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
+    api_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Plan
         fields = '__all__'
+
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
 
 
 class GoalSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
+    plan_id = serializers.IntegerField(read_only=True)
+    plan_name = serializers.CharField(read_only=True)
+    api_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Goal
         exclude = []
+
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
 
 
 class TargetSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
+    goal_name = serializers.CharField(read_only=True)
+    plan_id = serializers.IntegerField(read_only=True)
+    plan_name = serializers.CharField(read_only=True)
+    api_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Target
         exclude = []
+
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
 
 
 class IndicatorSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
+    target_name = serializers.CharField(read_only=True)
+    goal_id = serializers.IntegerField(read_only=True)
+    goal_name = serializers.CharField(read_only=True)
+    plan_id = serializers.IntegerField(read_only=True)
+    plan_name = serializers.CharField(read_only=True)
+    api_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Indicator
         exclude = []
 
-
-class ProgressSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Progress
-        exclude = []
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
 
 
 class ComponentSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
+    indicators_names = serializers.ListField(read_only=True)
+    targets_ids = serializers.ListField(read_only=True)
+    targets_names = serializers.ListField(read_only=True)
+    goals_ids = serializers.ListField(read_only=True)
+    goals_names = serializers.ListField(read_only=True)
+    plans_ids = serializers.ListField(read_only=True)
+    plans_names = serializers.ListField(read_only=True)
+    api_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Component
+        exclude = []
+
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
+
+
+class ProgressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Progress
         exclude = []
