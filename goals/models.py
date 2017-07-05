@@ -615,8 +615,7 @@ class Progress(models.Model):
     component = models.ForeignKey(Component,
                                   verbose_name=_('Component'),
                                   related_name='progress')
-    area = models.ForeignKey(Area, null=True, blank=True,
-                             verbose_name=_('Area'),
+    area = models.ForeignKey(Area, verbose_name=_('Area'),
                              related_name='progress')
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
@@ -648,6 +647,14 @@ class Progress(models.Model):
     @cached_property
     def component_name(self):
         return self.component.name
+
+    @cached_property
+    def area_code(self):
+        return self.area.code
+
+    @cached_property
+    def area_name(self):
+        return self.area.name
 
     @cached_property
     def value_unit(self):
