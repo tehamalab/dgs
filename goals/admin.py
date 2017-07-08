@@ -8,12 +8,12 @@ from .resources import GoalResource, TargetResource, IndicatorResource
 
 class ProgressInline(admin.TabularInline):
     model = Progress
-    exclude = ['slug']
+    exclude = ['slug', 'extras']
 
 
 class ComponentInline(admin.TabularInline):
     model = Component.indicators.through
-    exclude = ['slug']
+    exclude = ['slug', 'extras']
 
 
 class AreaTypeAdmin(ImportExportModelAdmin):
