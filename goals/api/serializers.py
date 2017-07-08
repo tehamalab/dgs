@@ -131,8 +131,10 @@ class ComponentSerializer(serializers.ModelSerializer):
 
 
 class ProgressSerializer(serializers.ModelSerializer):
-    area_name = serializers.CharField(read_only=True)
     area_code = serializers.CharField(read_only=True)
+    area_name = serializers.CharField(read_only=True)
+    group_code = serializers.CharField(read_only=True)
+    group_name = serializers.CharField(read_only=True)
     value_unit = serializers.CharField(read_only=True)
 
     class Meta:

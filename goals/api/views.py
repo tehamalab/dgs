@@ -52,7 +52,7 @@ class PlanViewSet(ModelViewSet):
 
 
 class GoalViewSet(ModelViewSet):
-    queryset = Goal.objects.prefetch_related('plan')
+    queryset = Goal.objects.all()
     serializer_class = GoalSerializer
     filter_class = GoalFilter
     ordering_fields = ('id', 'code', 'name')

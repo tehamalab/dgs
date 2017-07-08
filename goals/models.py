@@ -90,11 +90,13 @@ class Area(MPTTModel):
     def type_code(self):
         if self.type:
             return self.extras.get('type_code', '') or self.type.code
+        return ""
 
     @cached_property
     def type_name(self):
         if self.type:
             return self.extras.get('type_name', '') or self.type.name
+        return ""
 
 
 class Group(models.Model):
@@ -684,6 +686,17 @@ class Progress(models.Model):
     def __str__(self):
         return '%d:%d' %(self.year, self.value)
 
+    def save(self, *args, **kwargs):
+        self.extras['area_code'] = self.area.code
+        self.extras['area_name'] = self.area.name
+        self.extras['component_code'] = self.component.code
+        self.extras['component_name'] = self.component.name
+        self.extras['value_unit'] = self.component.value_unit
+        if self.group:
+            self.extras['group_code'] = self.group.code
+            self.extras['group_name'] = self.group.name
+        super(Progress, self).save(*args, **kwargs)
+
     @cached_property
     def api_url(self):
         try:
@@ -695,24 +708,33 @@ class Progress(models.Model):
 
     @cached_property
     def component_code(self):
-        return self.component.code
+        return self.extras.get('component_code', '')\
+            or self.component.code
 
     @cached_property
     def component_name(self):
-        return self.component.name
+        return self.extras.get('component_name', '')\
+            or self.component.name
 
     @cached_property
     def area_code(self):
-        return self.area.code
+        return self.extras.get('area_code', '') or self.area.code
 
     @cached_property
     def area_name(self):
-        return self.area.name
+        return self.extras.get('area_name', '') or self.area.name
+
+    @cached_property
+    def group_code(self):
+        if self.group:
+            return self.extras.get('group_code', '') or self.group.code
+
+    @cached_property
+    def group_name(self):
+        if self.group:
+            return self.extras.get('group_name', '') or self.group.name
+        return ""
 
     @cached_property
     def value_unit(self):
-        return self.component.value_unit
-
-    @cached_property
-    def indicator_code(self):
-        return self.component.indicator.code
+        return self.extras.get('value_unit', '')
