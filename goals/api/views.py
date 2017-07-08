@@ -1,12 +1,12 @@
 from django.utils import timezone
 from django.template.defaultfilters import slugify
 from rest_framework import viewsets
-from .serializers import (AreaSerializer, PlanSerializer,
-                          GoalSerializer, TargetSerializer,
-                          IndicatorSerializer, ComponentSerializer,
-                          ProgressSerializer)
-from ..models import (Area, Plan, Goal, Target, Indicator, Component,
-                      Progress)
+from .serializers import (AreaSerializer, AreaTypeSerializer,
+                          PlanSerializer, GoalSerializer,
+                          TargetSerializer, IndicatorSerializer,
+                          ComponentSerializer, ProgressSerializer)
+from ..models import (AreaType, Area, Plan, Goal, Target, Indicator,
+                      Component, Progress)
 from ..filters import (AreaFilter, PlanFilter, GoalFilter, TargetFilter,
                        IndicatorFilter, ComponentFilter, ProgressFilter)
 
@@ -22,6 +22,11 @@ class ModelViewSet(viewsets.ModelViewSet):
             response['content-disposition'] = 'attachment; filename=%s'\
                 %filename
         return response
+
+
+class AreaTypeViewSet(ModelViewSet):
+    queryset = AreaType.objects.all()
+    serializer_class = AreaTypeSerializer
 
 
 class AreaViewSet(ModelViewSet):

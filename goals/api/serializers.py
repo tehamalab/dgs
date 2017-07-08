@@ -1,6 +1,13 @@
 from rest_framework import serializers
-from ..models import (Area, Plan, Goal, Target, Indicator, Component,
-                      Progress)
+from ..models import (Area, AreaType, Plan, Goal, Target, Indicator,
+                      Component, Progress)
+
+
+class AreaTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AreaType
+        fields = '__all__'
 
 
 class AreaSerializer(serializers.ModelSerializer):

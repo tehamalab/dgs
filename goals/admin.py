@@ -2,7 +2,7 @@ from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
 from .models import (Plan, Goal, Target, Indicator, Component, Progress,
-                     Area)
+                     Area, AreaType)
 from .resources import GoalResource, TargetResource, IndicatorResource
 
 
@@ -14,6 +14,10 @@ class ProgressInline(admin.TabularInline):
 class ComponentInline(admin.TabularInline):
     model = Component.indicators.through
     exclude = ['slug']
+
+
+class AreaTypeAdmin(ImportExportModelAdmin):
+    search_fields = ['code', 'name', 'description']
 
 
 class AreaAdmin(DraggableMPTTAdmin):
@@ -75,6 +79,7 @@ class ProgressAdmin(ImportExportModelAdmin):
     list_select_related = ['component']
 
 
+admin.site.register(AreaType, AreaTypeAdmin)
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(Goal, GoalAdmin)

@@ -10,6 +10,23 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 
 
+class AreaType(models.Model):
+    code = models.CharField(_('Code'), max_length=10, unique=True)
+    name = models.CharField(_('Name'), max_length=255)
+    description = models.TextField(_('Description'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Area Type')
+        verbose_name_plural = _('Area Types')
+
+    def __str__(self):
+        return self.name
+
+
 class Area(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True,
                             related_name='children', db_index=True)
