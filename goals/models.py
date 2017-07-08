@@ -97,6 +97,23 @@ class Area(MPTTModel):
             return self.extras.get('type_name', '') or self.type.name
 
 
+class Group(models.Model):
+    code = models.CharField(_('Code'), max_length=10, unique=True)
+    name = models.CharField(_('Name'), max_length=255)
+    description = models.TextField(_('Description'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Group')
+        verbose_name_plural = _('Groups')
+
+    def __str__(self):
+        return self.name
+
+
 class Plan(models.Model):
     code = models.CharField(_('code'), max_length=10,
                             unique=True)

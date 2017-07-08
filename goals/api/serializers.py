@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from ..models import (Area, AreaType, Plan, Goal, Target, Indicator,
-                      Component, Progress)
+from ..models import (Area, AreaType, Group, Plan, Goal, Target,
+                      Indicator, Component, Progress)
 
 
 class AreaTypeSerializer(serializers.ModelSerializer):
@@ -19,6 +19,13 @@ class AreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Area
+        fields = '__all__'
+
+
+class GroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Group
         fields = '__all__'
 
 
