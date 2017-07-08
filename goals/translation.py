@@ -1,5 +1,9 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Plan, Goal, Target, Indicator, Component
+from .models import Area, Plan, Goal, Target, Indicator, Component
+
+@register(Area)
+class PlanTranslationOptions(TranslationOptions):
+    fields = ('name', 'description', 'image')
 
 
 @register(Plan)
