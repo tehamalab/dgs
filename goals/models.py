@@ -651,6 +651,7 @@ class Progress(models.Model):
                              related_name='progress')
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
+    remarks = models.TextField(_('Remarks'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
