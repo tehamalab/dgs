@@ -22,6 +22,7 @@ class AreaTypeAdmin(ImportExportModelAdmin):
 
 class AreaAdmin(DraggableMPTTAdmin):
     prepopulated_fields = {"slug": ("name",)}
+    list_filter = ['type']
 
 
 class PlanAdmin(ImportExportModelAdmin):

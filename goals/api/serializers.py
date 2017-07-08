@@ -14,10 +14,12 @@ class AreaSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
+    type_code = serializers.CharField(read_only=True)
+    type_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Area
-        exclude = ['tree_id']
+        fields = '__all__'
 
 
 class PlanSerializer(serializers.ModelSerializer):

@@ -32,7 +32,9 @@ class Area(MPTTModel):
                             related_name='children', db_index=True)
     code = models.CharField(_('Area code'), max_length=10, unique=True)
     name = models.CharField(_('Area name'), max_length=255)
-    type = models.CharField(_('Area type'), max_length=255, blank=True)
+    type = models.ForeignKey('goals.AreaType', verbose_name=_('Area type'),
+                             related_name='areas', null=True,
+                             blank=True)
     description = models.TextField(_('Area description'), blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/areas/images',
@@ -64,6 +66,9 @@ class Area(MPTTModel):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.get_slug()
+        if self.type:
+            self.extras['type_code'] = self.type.code
+            self.extras['type_name'] = self.type.name
         super(Area, self).save(*args, **kwargs)
 
     def get_slug(self):
@@ -80,6 +85,16 @@ class Area(MPTTModel):
             # API isn't installed
             # FIXME: Catch a specific exception
             return ''
+
+    @cached_property
+    def type_code(self):
+        if self.type:
+            return self.extras.get('type_code', '') or self.type.code
+
+    @cached_property
+    def type_name(self):
+        if self.type:
+            return self.extras.get('type_name', '') or self.type.name
 
 
 class Plan(models.Model):
