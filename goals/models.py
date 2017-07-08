@@ -666,6 +666,9 @@ class Progress(models.Model):
                                   related_name='progress')
     area = models.ForeignKey(Area, verbose_name=_('Area'),
                              related_name='progress')
+    group = models.ForeignKey(Group, verbose_name=_('Group'),
+                              related_name='progress',
+                              blank=True, null=True)
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
     remarks = models.TextField(_('Remarks'), blank=True)
