@@ -24,7 +24,7 @@ class GroupAdmin(ImportExportModelAdmin):
     search_fields = ['code', 'name', 'description']
 
 
-class AreaAdmin(DraggableMPTTAdmin):
+class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ['type']
 
