@@ -30,7 +30,7 @@ class AreaType(models.Model):
 class Area(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True,
                             related_name='children', db_index=True)
-    code = models.CharField(_('Area code'), max_length=10, unique=True)
+    code = models.CharField(_('Area code'), max_length=20, unique=True)
     name = models.CharField(_('Area name'), max_length=255)
     type = models.ForeignKey('goals.AreaType', verbose_name=_('Area type'),
                              related_name='areas', null=True,
