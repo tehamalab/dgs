@@ -3,7 +3,8 @@ from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
 from .models import (Plan, Goal, Target, Indicator, Component, Progress,
                      Area, AreaType, Group)
-from .resources import GoalResource, TargetResource, IndicatorResource
+from .resources import (AreaResource, GoalResource, TargetResource,
+                        IndicatorResource)
 
 
 class ProgressInline(admin.TabularInline):
@@ -25,6 +26,7 @@ class GroupAdmin(ImportExportModelAdmin):
 
 
 class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
+    resource_class = AreaResource
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ['type']
 
