@@ -3,7 +3,7 @@ from import_export import widgets, resources, fields
 from .models import (Area, Goal, Target, Indicator)
 
 
-class HStoreWidget(widgets.Widget):
+class JSONWidget(widgets.Widget):
     """
     Widget for converting HStore fields.
     """
@@ -15,6 +15,7 @@ class HStoreWidget(widgets.Widget):
 
 
 class GoalResource(resources.ModelResource):
+    extras = fields.Field(attribute='extras', widget=JSONWidget())
 
     class Meta:
         model = Goal
@@ -22,6 +23,7 @@ class GoalResource(resources.ModelResource):
 
 
 class TargetResource(resources.ModelResource):
+    extras = fields.Field(attribute='extras', widget=JSONWidget())
 
     class Meta:
         model = Target
@@ -29,6 +31,7 @@ class TargetResource(resources.ModelResource):
 
 
 class IndicatorResource(resources.ModelResource):
+    extras = fields.Field(attribute='extras', widget=JSONWidget())
 
     class Meta:
         model = Indicator
@@ -38,7 +41,7 @@ class IndicatorResource(resources.ModelResource):
 class AreaResource(resources.ModelResource):
     parent = fields.Field(
         attribute='parent', widget=widgets.ForeignKeyWidget(Area))
-    extras = fields.Field(attribute='extras', widget=HStoreWidget())
+    extras = fields.Field(attribute='extras', widget=JSONWidget())
 
     class Meta:
         model = Area
