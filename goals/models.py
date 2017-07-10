@@ -11,7 +11,7 @@ from imagekit.processors import ResizeToFit
 
 
 class AreaType(models.Model):
-    code = models.CharField(_('Code'), max_length=10, unique=True)
+    code = models.CharField(_('Code'), max_length=20, unique=True)
     name = models.CharField(_('Name'), max_length=255)
     description = models.TextField(_('Description'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
@@ -100,7 +100,7 @@ class Area(MPTTModel):
 
 
 class Group(models.Model):
-    code = models.CharField(_('Code'), max_length=10, unique=True)
+    code = models.CharField(_('Code'), max_length=20, unique=True)
     name = models.CharField(_('Name'), max_length=255)
     description = models.TextField(_('Description'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
