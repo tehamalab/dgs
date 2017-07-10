@@ -3,8 +3,8 @@ from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
 from .models import (Plan, Goal, Target, Indicator, Component, Progress,
                      Area, AreaType, Group)
-from .resources import (AreaResource, GoalResource, TargetResource,
-                        IndicatorResource)
+from .import_export import (AreaResource, GoalResource, TargetResource,
+                            IndicatorResource)
 
 
 class ProgressInline(admin.TabularInline):
