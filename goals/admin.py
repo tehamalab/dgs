@@ -75,7 +75,7 @@ class ProgressAdmin(ImportExportModelAdmin):
     list_display = ['component_code', 'component_name', 'year', 'value',
                     'value_unit']
     list_display_links = ['component_name', 'year', 'value']
-    list_filter = ['year', 'component__indicators']
+    list_filter = ['year', 'fiscal_year', 'component__indicators']
     search_fields = ['component__indicators__code',
                      'component__indicators__description']
     ordering = ['id']

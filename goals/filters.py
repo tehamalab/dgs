@@ -75,5 +75,6 @@ class ProgressFilter(django_filters.FilterSet):
             'area': ['exact'],
             'area__code': ['exact'],
             'year': ['exact', 'lt', 'lte', 'gt', 'gte'],
+            'fiscal_year': ['exact', 'lt', 'lte', 'gt', 'gte'],
             'value': ['exact', 'lt', 'lte', 'gt', 'gte']
         }

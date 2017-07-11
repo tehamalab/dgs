@@ -1,5 +1,6 @@
 import json
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.contrib.postgres.fields import HStoreField, ArrayField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify, truncatechars
@@ -654,7 +655,9 @@ class Progress(models.Model):
     groups = ArrayField(
         models.CharField(max_length=50, blank=True), null=True,
         blank=True, verbose_name=_('Groups'), default=[])
-    year = models.IntegerField(_('Year'))
+    year = models.IntegerField(_('Year'), blank=True, null=True)
+    fiscal_year = models.CharField(_('Fiscal year'), max_length=8,
+                                   blank=True)
     value = models.FloatField(_('Value'))
     remarks = models.TextField(_('Remarks'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
@@ -676,6 +679,12 @@ class Progress(models.Model):
         self.extras['component_name'] = self.component.name
         self.extras['value_unit'] = self.component.value_unit
         super(Progress, self).save(*args, **kwargs)
+
+    def clean(self):
+        super(Progress, self).clean()
+        if not self.year and not self.fiscal_year:
+            raise ValidationError(
+                _('A year or a fiscal year must be provided'))
 
     @cached_property
     def api_url(self):
