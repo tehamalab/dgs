@@ -1,6 +1,6 @@
 import django_filters
 from .models import (Plan, Goal, Target, Indicator, Component, Progress,
-                     Area)
+                     Area, AreaType)
 
 
 class AreaFilter(django_filters.FilterSet):
@@ -67,6 +67,8 @@ class ProgressFilter(django_filters.FilterSet):
     target = django_filters.ModelChoiceFilter(
         name='component__indicators__target',
         queryset=Target.objects.all())
+    area_type = django_filters.ModelChoiceFilter(
+        name='area__type', queryset=AreaType.objects.all())
 
     class Meta:
         model = Progress

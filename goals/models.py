@@ -675,6 +675,8 @@ class Progress(models.Model):
     def save(self, *args, **kwargs):
         self.extras['area_code'] = self.area.code
         self.extras['area_name'] = self.area.name
+        self.extras['area_type_code'] = self.area.type_code
+        self.extras['area_type_name'] = self.area.type_name
         self.extras['component_code'] = self.component.code
         self.extras['component_name'] = self.component.name
         self.extras['value_unit'] = self.component.value_unit
@@ -706,6 +708,16 @@ class Progress(models.Model):
     @cached_property
     def area_name(self):
         return self.extras.get('area_name', '') or self.area.name
+
+    @cached_property
+    def area_type_code(self):
+        return self.extras.get('area_type_code', '')\
+            or self.area.type_code
+
+    @cached_property
+    def area_type_name(self):
+        return self.extras.get('area_type_name', '')\
+            or self.area.type_name
 
     @cached_property
     def value_unit(self):
