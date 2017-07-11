@@ -656,7 +656,7 @@ class Progress(models.Model):
         models.CharField(max_length=50, blank=True), null=True,
         blank=True, verbose_name=_('Groups'), default=[])
     year = models.PositiveIntegerField(_('Year'))
-    fiscal_year = models.CharField(_('Fiscal year'), max_length=8,
+    fiscal_year = models.CharField(_('Fiscal year'), max_length=9,
                                    blank=True)
     value = models.FloatField(_('Value'))
     remarks = models.TextField(_('Remarks'), blank=True)
