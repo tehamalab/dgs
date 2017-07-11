@@ -30,7 +30,6 @@ class DefaultRouter(routers.DefaultRouter):
 router = DefaultRouter()
 router.register(r'areatypes', goals_views.AreaTypeViewSet)
 router.register(r'areas', goals_views.AreaViewSet)
-router.register(r'groups', goals_views.GroupViewSet)
 router.register(r'plans', goals_views.PlanViewSet)
 router.register(r'goals', goals_views.GoalViewSet)
 router.register(r'targets', goals_views.TargetViewSet)

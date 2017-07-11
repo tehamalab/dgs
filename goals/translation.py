@@ -1,6 +1,6 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import (AreaType, Area, Group, Plan, Goal, Target,
-                     Indicator, Component)
+from .models import (AreaType, Area, Plan, Goal, Target, Indicator,
+                     Component)
 
 
 @register(AreaType)
@@ -11,10 +11,6 @@ class AreaTypeTranslationOptions(TranslationOptions):
 @register(Area)
 class AreaTranslationOptions(TranslationOptions):
     fields = ('name', 'description', 'image')
-
-@register(Group)
-class GroupTranslationOptions(TranslationOptions):
-    fields = ('name', 'description')
 
 
 @register(Plan)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import (Area, AreaType, Group, Plan, Goal, Target,
+from ..models import (Area, AreaType, Plan, Goal, Target,
                       Indicator, Component, Progress)
 
 
@@ -19,13 +19,6 @@ class AreaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Area
-        fields = '__all__'
-
-
-class GroupSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Group
         fields = '__all__'
 
 
@@ -133,8 +126,6 @@ class ComponentSerializer(serializers.ModelSerializer):
 class ProgressSerializer(serializers.ModelSerializer):
     area_code = serializers.CharField(read_only=True)
     area_name = serializers.CharField(read_only=True)
-    group_code = serializers.CharField(read_only=True)
-    group_name = serializers.CharField(read_only=True)
     value_unit = serializers.CharField(read_only=True)
 
     class Meta:

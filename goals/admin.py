@@ -2,7 +2,7 @@ from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
 from .models import (Plan, Goal, Target, Indicator, Component, Progress,
-                     Area, AreaType, Group)
+                     Area, AreaType)
 from .import_export import (AreaResource, GoalResource, TargetResource,
                             IndicatorResource)
 
@@ -18,10 +18,6 @@ class ComponentInline(admin.TabularInline):
 
 
 class AreaTypeAdmin(ImportExportModelAdmin):
-    search_fields = ['code', 'name', 'description']
-
-
-class GroupAdmin(ImportExportModelAdmin):
     search_fields = ['code', 'name', 'description']
 
 
@@ -88,7 +84,6 @@ class ProgressAdmin(ImportExportModelAdmin):
 
 admin.site.register(AreaType, AreaTypeAdmin)
 admin.site.register(Area, AreaAdmin)
-admin.site.register(Group, GroupAdmin)
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(Goal, GoalAdmin)
 admin.site.register(Target, TargetAdmin)

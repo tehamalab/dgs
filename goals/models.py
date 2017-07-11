@@ -1,6 +1,6 @@
 import json
 from django.db import models
-from django.contrib.postgres.fields import HStoreField
+from django.contrib.postgres.fields import HStoreField, ArrayField
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify, truncatechars
 from django.utils.functional import cached_property
@@ -97,23 +97,6 @@ class Area(MPTTModel):
         if self.type:
             return self.extras.get('type_name', '') or self.type.name
         return ""
-
-
-class Group(models.Model):
-    code = models.CharField(_('Code'), max_length=20, unique=True)
-    name = models.CharField(_('Name'), max_length=255)
-    description = models.TextField(_('Description'), blank=True)
-    created = models.DateTimeField(_('Created'), auto_now_add=True)
-    last_modified = models.DateTimeField(_('Last modified'),
-                                         auto_now=True)
-    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
-
-    class Meta:
-        verbose_name = _('Group')
-        verbose_name_plural = _('Groups')
-
-    def __str__(self):
-        return self.name
 
 
 class Plan(models.Model):
@@ -668,9 +651,9 @@ class Progress(models.Model):
                                   related_name='progress')
     area = models.ForeignKey(Area, verbose_name=_('Area'),
                              related_name='progress')
-    group = models.ForeignKey(Group, verbose_name=_('Group'),
-                              related_name='progress',
-                              blank=True, null=True)
+    groups = ArrayField(
+        models.CharField(max_length=50, blank=True), null=True,
+        blank=True, verbose_name=_('Groups'), default=[])
     year = models.IntegerField(_('Year'))
     value = models.FloatField(_('Value'))
     remarks = models.TextField(_('Remarks'), blank=True)
@@ -692,9 +675,6 @@ class Progress(models.Model):
         self.extras['component_code'] = self.component.code
         self.extras['component_name'] = self.component.name
         self.extras['value_unit'] = self.component.value_unit
-        if self.group:
-            self.extras['group_code'] = self.group.code
-            self.extras['group_name'] = self.group.name
         super(Progress, self).save(*args, **kwargs)
 
     @cached_property
@@ -723,17 +703,6 @@ class Progress(models.Model):
     @cached_property
     def area_name(self):
         return self.extras.get('area_name', '') or self.area.name
-
-    @cached_property
-    def group_code(self):
-        if self.group:
-            return self.extras.get('group_code', '') or self.group.code
-
-    @cached_property
-    def group_name(self):
-        if self.group:
-            return self.extras.get('group_name', '') or self.group.name
-        return ""
 
     @cached_property
     def value_unit(self):
