@@ -655,7 +655,7 @@ class Progress(models.Model):
     groups = ArrayField(
         models.CharField(max_length=50, blank=True), null=True,
         blank=True, verbose_name=_('Groups'), default=[])
-    year = models.IntegerField(_('Year'), blank=True, null=True)
+    year = models.PositiveIntegerField(_('Year'))
     fiscal_year = models.CharField(_('Fiscal year'), max_length=8,
                                    blank=True)
     value = models.FloatField(_('Value'))
@@ -679,12 +679,6 @@ class Progress(models.Model):
         self.extras['component_name'] = self.component.name
         self.extras['value_unit'] = self.component.value_unit
         super(Progress, self).save(*args, **kwargs)
-
-    def clean(self):
-        super(Progress, self).clean()
-        if not self.year and not self.fiscal_year:
-            raise ValidationError(
-                _('A year or a fiscal year must be provided'))
 
     @cached_property
     def api_url(self):
