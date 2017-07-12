@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_haystack.viewsets import HaystackViewSet
 from haystack_elasticsearch5.query import SearchQuerySet
 from .serializers import SearchResultSerializer
+from .pagination import SearchPagination
 from ..filters import SimpleFilterBackend
 
 
@@ -17,6 +18,7 @@ Component = apps.get_registered_model('goals', 'Component')
 class SearchViewSet(HaystackViewSet):
 
     index_models = [Plan, Goal, Target, Indicator, Component]
+    pagination_class = SearchPagination
     serializer_class = SearchResultSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [SimpleFilterBackend]
