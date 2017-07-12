@@ -33,9 +33,9 @@ class Area(MPTTModel):
                             related_name='children', db_index=True)
     code = models.CharField(_('Area code'), max_length=20, unique=True)
     name = models.CharField(_('Area name'), max_length=255)
-    type = models.ForeignKey('goals.AreaType', verbose_name=_('Area type'),
-                             related_name='areas', null=True,
-                             blank=True)
+    type = models.ForeignKey('goals.AreaType',
+                             verbose_name=_('Area type'),
+                             related_name='areas')
     description = models.TextField(_('Area description'), blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/areas/images',
@@ -712,7 +712,8 @@ class Progress(models.Model):
 
     @cached_property
     def area_type_id(self):
-        return int(self.extras.get('area_type_id', 0)) or None
+        return int(self.extras.get('area_type_id', 0))\
+            or self.area.type_id
 
     @cached_property
     def area_type_code(self):
