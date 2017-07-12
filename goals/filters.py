@@ -67,15 +67,16 @@ class ProgressFilter(django_filters.FilterSet):
     target = django_filters.ModelChoiceFilter(
         name='component__indicators__target',
         queryset=Target.objects.all())
+    area_code = django_filters.CharFilter(name='area__code')
     area_type = django_filters.ModelChoiceFilter(
         name='area__type', queryset=AreaType.objects.all())
+    area_type_code = django_filters.CharFilter(name='area__type__code')
 
     class Meta:
         model = Progress
         fields = {
             'component': ['exact'],
             'area': ['exact'],
-            'area__code': ['exact'],
             'year': ['exact', 'lt', 'lte', 'gt', 'gte'],
             'fiscal_year': ['exact', 'lt', 'lte', 'gt', 'gte'],
             'value': ['exact', 'lt', 'lte', 'gt', 'gte']
