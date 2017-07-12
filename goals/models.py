@@ -505,7 +505,7 @@ class Component(models.Model):
                                         verbose_name=_('Indicators'),
                                         related_name='components')
     code = models.CharField(_('Component number'), max_length=10,
-                            blank=True)
+                            unique=True)
     name = models.CharField(_('Component name'), max_length=255)
     description = models.TextField(_('Component description'),
                                   blank=True)
