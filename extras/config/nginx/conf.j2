@@ -60,6 +60,7 @@ server {
     }
 
     location {{ nginx_media_location }} {
+        add_header Access-Control-Allow-Origin *;
         alias {{ nginx_media_alias }};
     }
 
