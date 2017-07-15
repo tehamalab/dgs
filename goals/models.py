@@ -11,10 +11,16 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 
 
+def area_type_topo_path(instance, filename):
+    return 'topojson/areatype/{0}/{1}'.format(instance.code, filename)
+
+
 class AreaType(models.Model):
     code = models.CharField(_('Code'), max_length=20, unique=True)
     name = models.CharField(_('Name'), max_length=255)
     description = models.TextField(_('Description'), blank=True)
+    topojson = models.FileField(_('TopoJSON'), blank=True, null=True,
+                                upload_to=area_type_topo_path)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
