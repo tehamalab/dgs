@@ -87,6 +87,7 @@ class IndicatorSerializer(serializers.ModelSerializer):
     plan_id = serializers.IntegerField(read_only=True)
     plan_code = serializers.CharField(read_only=True)
     plan_name = serializers.CharField(read_only=True)
+    progress_count = serializers.IntegerField(read_only=True)
     api_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -112,6 +113,7 @@ class ComponentSerializer(serializers.ModelSerializer):
     plans_ids = serializers.ListField(read_only=True)
     plans_codes = serializers.ListField(read_only=True)
     plans_names = serializers.ListField(read_only=True)
+    progress_count = serializers.IntegerField(read_only=True)
     api_url = serializers.SerializerMethodField()
 
     class Meta:

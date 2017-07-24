@@ -44,6 +44,7 @@ class IndicatorFilter(django_filters.FilterSet):
     description = django_filters.CharFilter(lookup_expr='icontains')
     data_source = django_filters.CharFilter(lookup_expr='icontains')
     agency = django_filters.CharFilter(lookup_expr='iexact')
+    progress_count = django_filters.NumberFilter(lookup_expr='gte')
 
     class Meta:
         model = Indicator
@@ -55,6 +56,7 @@ class ComponentFilter(django_filters.FilterSet):
     description = django_filters.CharFilter(lookup_expr='icontains')
     goal = django_filters.ModelChoiceFilter(
         name='indicators__target__goal', queryset=Goal.objects.all())
+    progress_count = django_filters.NumberFilter(lookup_expr='gte')
 
     class Meta:
         model = Component

@@ -1,4 +1,5 @@
 from django.apps import apps
+from django.db.models import Count
 from haystack_elasticsearch5 import indexes
 
 Plan = apps.get_registered_model('goals', 'Plan')
@@ -74,9 +75,17 @@ class IndicatorIndex(TargetIndex):
                                    null=True, faceted=True)
     plan_id = indexes.IntegerField(model_attr='plan_id',
                                    null=True, faceted=True)
+    progress_count = indexes.IntegerField(null=True)
     
     def get_model(self):
         return Indicator
+
+    def index_queryset(self, using=None):
+        return self.get_model().objects.annotate(
+            progress_count=Count('components__progress'))
+
+    def prepare_progress_count(self, obj):
+        return obj.progress_count
 
 
 class ComponentIndex(PlanIndex):
@@ -109,9 +118,17 @@ class ComponentIndex(PlanIndex):
                                     null=True, faceted=True)
     stats_available = indexes.BooleanField(model_attr='stats_available',
                                            null=True, faceted=True)
+    progress_count = indexes.IntegerField(null=True)
     
     def get_model(self):
         return Component
 
+    def index_queryset(self, using=None):
+        return self.get_model().objects.annotate(
+            progress_count=Count('progress'))
+
     def prepare_indicators(self, obj):
         return list(obj.indicators.values_list('id', flat=True))
+
+    def prepare_progress_count(self, obj):
+        return obj.progress_count

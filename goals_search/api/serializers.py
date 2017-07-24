@@ -20,8 +20,9 @@ class SearchResultSerializer(HaystackSerializer):
                   'targets_ids', 'targets_codes', 'targets_names',
                   'goals_ids', 'goals_codes', 'goals_names',
                   'plans_ids', 'plans_codes', 'plans_names',
-                  'agency', 'data_source', 'stats_available',
-                  'object_type', 'created', 'last_modified', 'content']
+                  'progress_count', 'agency', 'data_source',
+                  'stats_available', 'object_type', 'created',
+                  'last_modified', 'content']
 
     def get_api_url(self, obj):
         return self.context.get('request')\
