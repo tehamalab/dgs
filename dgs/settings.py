@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'mptt',
     'import_export',
+    'admin_reorder',
     'modeltranslation',
     'haystack',
     'rest_framework',
@@ -69,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 
 ROOT_URLCONF = 'dgs.urls'
@@ -234,6 +236,18 @@ ADMIN_SITE_TITLE = os.environ.get('ADMIN_SITE_TITLE', 'DGs Management')
 ADMIN_SITE_HEADER = os.environ.get('ADMIN_SITE_HEADER', 'Development Goals (DGs)')
 
 ADMIN_INDEX_TITLE = os.environ.get('ADMIN_INDEX_TITLE', 'Management')
+
+# https://django-modeladmin-reorder.readthedocs.io/en/latest/
+ADMIN_REORDER = (
+    {'app': 'auth', 'models': ('auth.User', 'auth.Group')},
+    {'app': 'goals',
+             'label': gettext('Development goals'),
+             'models': ('goals.Plan', 'goals.Goal', 'goals.Target',
+                        'goals.Indicator', 'goals.Component', 'goals.Progress')},
+    {'app': 'goals',
+            'label': gettext('Areas'),
+            'models': ('goals.AreaType', 'goals.Area')},
+)
 
 # API
 

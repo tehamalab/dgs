@@ -21,6 +21,9 @@ django-redis
 # data
 django-import-export
 
+# admin
+django-modeladmin-reorder
+
 # media
 Pillow
 django-imagekit
