@@ -298,8 +298,7 @@ class Target(models.Model):
         verbose_name_plural = _('Targets')
 
     def __str__(self):
-        return '%s : %s' \
-            %(self.code, truncatechars(self.description, 50))
+        return '%s %s : %s' %(self.plan_code, self.code, truncatechars(self.description, 50))
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -404,8 +403,8 @@ class Indicator(models.Model):
         verbose_name_plural = _('Indicators')
 
     def __str__(self):
-        return '%s : %s' \
-            %(self.code, truncatechars(self.description, 50))
+        return '%s %s : %s' \
+            %(self.plan_code, self.code, truncatechars(self.description, 50))
 
     def save(self, *args, **kwargs):
         if not self.slug:
