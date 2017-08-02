@@ -494,6 +494,10 @@ class Indicator(models.Model):
     def plan_name(self):
         return self.extras.get('plan_name', '') or self.goal.plan_name
 
+    @cached_property
+    def progress_count(self):
+        return Progress.objects.filter(component__indicators=self.id).count()
+
 
 class Component(models.Model):
     YES = 'YES'
@@ -649,6 +653,10 @@ class Component(models.Model):
     @cached_property
     def plans_names(self):
         return json.loads(self.extras.get('plans_names', '[]'))
+
+    @cached_property
+    def progress_count(self):
+        return Progress.objects.filter(component=self.id).count()
 
 
 class Progress(models.Model):
