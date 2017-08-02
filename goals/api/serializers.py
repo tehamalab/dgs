@@ -1,6 +1,21 @@
+from django.forms.models import model_to_dict
 from rest_framework import serializers
 from ..models import (Area, AreaType, Plan, Goal, Target,
                       Indicator, Component, Progress)
+
+
+class ProgressSerializer(serializers.ModelSerializer):
+    area_code = serializers.CharField(read_only=True)
+    area_name = serializers.CharField(read_only=True)
+    area_type_id = serializers.IntegerField(read_only=True,
+                                            allow_null=True)
+    area_type_name = serializers.CharField(read_only=True)
+    area_type_code = serializers.CharField(read_only=True)
+    value_unit = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = Progress
+        exclude = []
 
 
 class AreaTypeSerializer(serializers.ModelSerializer):
@@ -87,12 +102,21 @@ class IndicatorSerializer(serializers.ModelSerializer):
     plan_id = serializers.IntegerField(read_only=True)
     plan_code = serializers.CharField(read_only=True)
     plan_name = serializers.CharField(read_only=True)
-    progress_count = serializers.IntegerField(read_only=True)
     api_url = serializers.SerializerMethodField()
+    progress_count = serializers.IntegerField(read_only=True)
+    progress_preview = serializers.SerializerMethodField()
 
     class Meta:
         model = Indicator
-        exclude = []
+        fields = '__all__'
+
+    def get_progress_preview(self, obj):
+        if obj._prefetched_objects_cache['components']:
+            return [
+                model_to_dict(progress) for progress in \
+                obj._prefetched_objects_cache['components'][0].progress_preview
+            ]
+        return []
 
     def get_api_url(self, obj):
         return self.context.get('request')\
@@ -123,17 +147,3 @@ class ComponentSerializer(serializers.ModelSerializer):
     def get_api_url(self, obj):
         return self.context.get('request')\
             .build_absolute_uri(obj.api_url)
-
-
-class ProgressSerializer(serializers.ModelSerializer):
-    area_code = serializers.CharField(read_only=True)
-    area_name = serializers.CharField(read_only=True)
-    area_type_id = serializers.IntegerField(read_only=True,
-                                            allow_null=True)
-    area_type_name = serializers.CharField(read_only=True)
-    area_type_code = serializers.CharField(read_only=True)
-    value_unit = serializers.CharField(read_only=True)
-
-    class Meta:
-        model = Progress
-        exclude = []

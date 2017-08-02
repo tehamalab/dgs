@@ -1,6 +1,6 @@
 from django.utils import timezone
 from django.template.defaultfilters import slugify
-from django.db.models import Count
+from django.db.models import Count, Prefetch
 from rest_framework import viewsets
 from .serializers import (AreaSerializer, AreaTypeSerializer,
                           PlanSerializer, GoalSerializer,
@@ -63,12 +63,20 @@ class TargetViewSet(ModelViewSet):
 
 
 class IndicatorViewSet(ModelViewSet):
-    queryset = Indicator.objects.annotate(
-        progress_count=Count('components__progress'))
     serializer_class = IndicatorSerializer
     filter_class = IndicatorFilter
     ordering_fields = ('id', 'code', 'stats_available', 'progress_count')
     ordering = ('code',)
+
+    def get_queryset(self):
+        return Indicator.objects\
+            .annotate(progress_count=Count('components__progress'))\
+            .prefetch_related(
+                Prefetch('components__progress', to_attr='progress_preview',
+                        queryset=Progress.objects\
+                            .order_by('component__indicators', '-year')\
+                            .distinct('component__indicators')
+                    ))
 
 
 class ComponentViewSet(ModelViewSet):

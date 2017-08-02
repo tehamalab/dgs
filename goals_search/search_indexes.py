@@ -85,7 +85,7 @@ class IndicatorIndex(TargetIndex):
             progress_count=Count('components__progress'))
 
     def prepare_progress_count(self, obj):
-        return obj.progress_count
+        return obj.get_progress_count()
 
 
 class ComponentIndex(PlanIndex):
@@ -131,4 +131,4 @@ class ComponentIndex(PlanIndex):
         return list(obj.indicators.values_list('id', flat=True))
 
     def prepare_progress_count(self, obj):
-        return obj.progress_count
+        return obj.get_progress_count()
