@@ -111,12 +111,12 @@ class IndicatorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_progress_preview(self, obj):
+        progress_preview = []
         if obj._prefetched_objects_cache['components']:
-            return [
-                model_to_dict(progress) for progress in \
-                obj._prefetched_objects_cache['components'][0].progress_preview
-            ]
-        return []
+            for c in obj._prefetched_objects_cache['components']:
+                for p in c.progress_preview:
+                    progress_preview.append(model_to_dict(p))
+        return progress_preview
 
     def get_api_url(self, obj):
         return self.context.get('request')\
