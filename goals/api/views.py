@@ -74,7 +74,8 @@ class IndicatorViewSet(ModelViewSet):
             .prefetch_related(
                 Prefetch('components__progress', to_attr='progress_preview',
                         queryset=Progress.objects\
-                            .order_by('component__indicators', '-year')\
+                            .order_by('component__indicators', '-year',
+                                      'area__level')\
                             .distinct('component__indicators')
                     ))
 
