@@ -22,6 +22,7 @@ try:
 except ImportError:
     pass
 
+PROJECT_NAME = 'dgs'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'admin_reorder',
     'modeltranslation',
     'haystack',
+    'celery_haystack',
     'rest_framework',
     'django_filters',
     'corsheaders',
@@ -133,7 +135,7 @@ haystack_default_connection_class = os.environ.get('HAYSTACK_DEFAULT_CONNECTION_
 if haystack_default_connection_class:
     HAYSTACK_CONNECTIONS['default']['KWARGS']['connection_class'] = haystack_default_connection_class
 
-HAYSTACK_SIGNAL_PROCESSOR = os.environ.get('HAYSTACK_SIGNAL_PROCESSOR', 'haystack.signals.RealtimeSignalProcessor')
+HAYSTACK_SIGNAL_PROCESSOR = os.environ.get('HAYSTACK_SIGNAL_PROCESSOR', 'celery_haystack.signals.CelerySignalProcessor')
 
 HAYSTACK_DEFAULT_OPERATOR = os.environ.get('HAYSTACK_DEFAULT_OPERATOR', 'AND')
 
@@ -151,8 +153,6 @@ CACHES = {
         }
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -202,6 +202,33 @@ USE_I18N = str_to_bool(os.environ.get('USE_I18N', 'True'))
 USE_L10N = True
 
 USE_TZ = str_to_bool(os.environ.get('USE_TZ', 'True'))
+
+# Celery
+
+BROKER_URL = os.environ.get('BROKER_URL', 'amqp://guest:guest@localhost:5672//')
+
+CELERY_ACCEPT_CONTENT = ['json']
+
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'rpc')
+
+CELERY_TIMEZONE = os.environ.get('CELERY_TIMEZONE', TIME_ZONE)
+
+CELERY_ENABLE_UTC = True
+
+from kombu import Exchange, Queue
+CELERY_QUEUES = (
+    Queue(
+        PROJECT_NAME,
+        Exchange(PROJECT_NAME),
+        routing_key=PROJECT_NAME
+    ),
+)
+
+CELERY_HAYSTACK_QUEUE = PROJECT_NAME
 
 
 # Static files (CSS, JavaScript, Images)

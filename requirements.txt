@@ -11,12 +11,16 @@ django-modeltranslation
 
 # search
 django-haystack
+celery-haystack
 git+ssh://git@github.com/machakux/haystack-elasticsearch5.git
 elasticsearch
 certifi
 
 # cache
 django-redis
+
+# tasks
+Celery
 
 # data
 django-import-export

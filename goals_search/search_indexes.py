@@ -9,7 +9,7 @@ Indicator = apps.get_registered_model('goals', 'Indicator')
 Component = apps.get_registered_model('goals', 'Component')
 
 
-class PlanIndex(indexes.SearchIndex, indexes.Indexable):
+class PlanIndex(indexes.CelerySearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     code = indexes.CharField(model_attr='code', null=True)
     name = indexes.CharField(model_attr='name', null=True)
