@@ -21,6 +21,7 @@ class SearchResultSerializer(HaystackSerializer):
                   'goals_ids', 'goals_codes', 'goals_names',
                   'plans_ids', 'plans_codes', 'plans_names',
                   'progress_count', 'agency', 'data_source',
+                  'parent', 'parent_name', 'level',
                   'stats_available', 'object_type', 'created',
                   'last_modified', 'content']
 

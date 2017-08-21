@@ -1,9 +1,10 @@
 from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
-from .models import (Plan, Goal, Target, Indicator, Component, Progress,
-                     Area, AreaType)
-from .import_export import (AreaResource, GoalResource, TargetResource,
+from .models import (Plan, Goal, Theme, SectorType, Sector, Target, Indicator,
+                     Component, Progress, Area, AreaType)
+from .import_export import (AreaResource, GoalResource, ThemeResource,
+                            SectorTypeResource, SectorResource, TargetResource,
                             IndicatorResource)
 
 
@@ -47,6 +48,34 @@ class GoalAdmin(ImportExportModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+class ThemeAdmin(ImportExportModelAdmin):
+    resource_class = ThemeResource
+    ordering = ['id']
+    search_fields = ['^code', 'name', 'description', 'plans__code',
+                     'plans__name']
+    list_display = ['plans_codes_str', 'code', 'name', 'description']
+    list_display_links = ['code', 'name']
+    list_filter = ['plans']
+    filter_horizontal = ['plans']
+    prepopulated_fields = {"slug": ("name",)}
+
+
+class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
+    resource_class = SectorResource
+    ordering = ['id']
+    search_fields = ['^code', 'name', 'description']
+    list_display = ['code', 'name', 'description']
+    list_display_links = ['code', 'name']
+
+
+class SectorTypeAdmin(ImportExportModelAdmin):
+    resource_class = SectorTypeResource
+    ordering = ['id']
+    search_fields = ['^code', 'name']
+    list_display = ['code', 'name', 'description']
+    list_display_links = ['code', 'name']
+
+
 class TargetAdmin(ImportExportModelAdmin):
     resource_class = TargetResource
     ordering = ['id']
@@ -62,7 +91,7 @@ class IndicatorAdmin(ImportExportModelAdmin):
     search_fields = ['^code', 'name', 'description', '=target__code']
     list_display = ['plan_code', 'code', 'name']
     list_display_links = ['code', 'name']
-    list_filter = ['target__goal__plan', 'target__goal']
+    list_filter = ['target__goal__plan', 'target__goal', 'theme', 'sector']
     raw_id_fields = ['target']
     inlines = [ComponentInline]
 
@@ -102,7 +131,9 @@ admin.site.register(AreaType, AreaTypeAdmin)
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(Goal, GoalAdmin)
-admin.site.register(Target, TargetAdmin)
+admin.site.register(Theme, ThemeAdmin)
+admin.site.register(SectorType, SectorTypeAdmin)
+admin.site.register(Sector, SectorAdmin)
 admin.site.register(Indicator, IndicatorAdmin)
 admin.site.register(Component, ComponentAdmin)
 admin.site.register(Progress, ProgressAdmin)

@@ -3,13 +3,15 @@ from django.template.defaultfilters import slugify
 from django.db.models import Count, Prefetch
 from rest_framework import viewsets
 from .serializers import (AreaSerializer, AreaTypeSerializer,
-                          PlanSerializer, GoalSerializer,
+                          PlanSerializer, ThemeSerializer, GoalSerializer,
+                          SectorTypeSerializer, SectorSerializer,
                           TargetSerializer, IndicatorSerializer,
                           ComponentSerializer, ProgressSerializer)
-from ..models import (AreaType, Area, Plan, Goal, Target,
-                      Indicator, Component, Progress)
-from ..filters import (AreaFilter, PlanFilter, GoalFilter, TargetFilter,
-                       IndicatorFilter, ComponentFilter, ProgressFilter)
+from ..models import (AreaType, Area, Plan, Theme, SectorType, Sector, Goal,
+                      Target, Indicator, Component, Progress)
+from ..filters import (AreaFilter, PlanFilter, GoalFilter, ThemeFilter,
+                       SectorFilter, TargetFilter, IndicatorFilter,
+                       ComponentFilter, ProgressFilter)
 
 
 class ModelViewSet(viewsets.ModelViewSet):
@@ -42,6 +44,29 @@ class PlanViewSet(ModelViewSet):
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
     filter_class = PlanFilter
+    ordering_fields = ('id', 'code', 'name')
+    ordering = ('id',)
+
+
+class ThemeViewSet(ModelViewSet):
+    queryset = Theme.objects.all()
+    serializer_class = ThemeSerializer
+    filter_class = ThemeFilter
+    ordering_fields = ('id', 'code', 'name')
+    ordering = ('id',)
+
+
+class SectorTypeViewSet(ModelViewSet):
+    queryset = SectorType.objects.all()
+    serializer_class = SectorTypeSerializer
+    ordering_fields = ('id', 'code', 'name')
+    ordering = ('id',)
+
+
+class SectorViewSet(ModelViewSet):
+    queryset = Sector.objects.all()
+    serializer_class = SectorSerializer
+    filter_class = SectorFilter
     ordering_fields = ('id', 'code', 'name')
     ordering = ('id',)
 

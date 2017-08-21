@@ -179,6 +179,180 @@ class Plan(models.Model):
             return self.image_large.url
 
 
+class Theme(models.Model):
+    plans = models.ManyToManyField('goals.Plan', verbose_name='Plans',
+                                   related_name='themes')
+    name = models.CharField(_('Theme name'), max_length=255)
+    code = models.CharField(_('Theme number'), max_length=10)
+    description = models.TextField(_('Theme description'), blank=True)
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/themes/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Theme')
+        verbose_name_plural = _('Themes')
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.get_slug()
+        plans = self.plans.all()
+        self.extras['plans_ids'] = json.dumps([i.id for i in plans])
+        self.extras['plans_names'] = json.dumps([i.name for i in plans])
+        self.extras['plans_codes'] = json.dumps([i.code for i in plans])
+        super(Theme, self).save(*args, **kwargs)
+
+    @cached_property
+    def plans_ids(self):
+        return json.loads(self.extras.get('plans_ids', '[]'))
+
+    @cached_property
+    def plans_codes(self):
+        return json.loads(self.extras.get('plans_codes', '[]'))
+
+    @cached_property
+    def plans_codes_str(self):
+        return json.loads(self.extras.get('plans_codes', '[]')).join(', ')
+
+    @cached_property
+    def plans_names(self):
+        return json.loads(self.extras.get('plans_names', '[]'))
+
+    @cached_property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+
+    @cached_property
+    def image_small_url(self):
+        if self.image_small:
+            return self.image_small.url
+
+    @cached_property
+    def image_medium_url(self):
+        if self.image_medium:
+            return self.image_medium.url
+
+    @cached_property
+    def image_large_url(self):
+        if self.image_large:
+            return self.image_large.url
+
+    @cached_property
+    def plan_name(self):
+        return self.extras.get('plan_name', '') or self.plan.name
+
+    @cached_property
+    def plan_code(self):
+        return self.extras.get('plan_code', '') or self.plan.code
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('theme-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
+
+
+class SectorType(models.Model):
+    code = models.CharField(_('Code'), max_length=20, unique=True)
+    name = models.CharField(_('Name'), max_length=255)
+    description = models.TextField(_('Description'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Sector Type')
+        verbose_name_plural = _('Sector Types')
+
+    def __str__(self):
+        return self.name
+
+
+
+class Sector(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True,
+                            related_name='children', db_index=True)
+    name = models.CharField(_('Sector name'), max_length=255)
+    code = models.CharField(_('Sector code'), max_length=20)
+    type = models.ForeignKey('goals.SectorType',
+                             verbose_name=_('Sector type'),
+                             related_name='sextors')
+    description = models.TextField(_('Sector description'), blank=True)
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/sectors/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Sector')
+        verbose_name_plural = _('Sectors')
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.get_slug()
+        if self.type:
+            self.extras['type_code'] = self.type.code
+            self.extras['type_name'] = self.type.name
+        super(Sector, self).save(*args, **kwargs)
+
+    def get_slug(self):
+        if not self.slug:
+            slug = slugify(self.name[:50])
+            return slug
+        return self.slug
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('sector-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
+
+
 class Goal(models.Model):
     plan = models.ForeignKey('goals.Plan', verbose_name='plan',
                              related_name='goals')
@@ -371,8 +545,12 @@ class Target(models.Model):
 
 
 class Indicator(models.Model):
+    theme = models.ForeignKey('goals.Theme', verbose_name=_('Theme'),
+                              related_name='indicators', null=True)
+    sector = models.ForeignKey('goals.Sector', verbose_name=_('Theme'),
+                              related_name='indicators', null=True)
     target = models.ForeignKey(Target, verbose_name=_('Target'),
-                               related_name='indicators')
+                               related_name='indicators', null=True)
     name = models.CharField(_('Indicator'), max_length=255)
     code = models.CharField(_('Indicator number'), max_length=10,
                             unique=True)
@@ -409,8 +587,18 @@ class Indicator(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.get_slug()
-        self.extras['target_code'] = self.target.code
-        self.extras['target_name'] = self.target.name
+        if self.theme:
+            self.extras['theme_code'] = self.theme.code
+            self.extras['theme_name'] = self.theme.name
+        if self.sector:
+            self.extras['sector_code'] = self.sector.code
+            self.extras['sector_name'] = self.sector.name
+            self.extras['root_sector_id'] = self.sector.get_root().id
+            self.extras['root_sector_code'] = self.sector.get_root().code
+            self.extras['root_sector_name'] = self.sector.get_root().name
+        if self.target:
+            self.extras['target_code'] = self.target.code
+            self.extras['target_name'] = self.target.name
         self.extras['goal_id'] = self.goal.id
         self.extras['goal_code'] = self.goal.code
         self.extras['goal_name'] = self.goal.name
@@ -455,12 +643,52 @@ class Indicator(models.Model):
             return self.image_large.url
 
     @cached_property
+    def theme_code(self):
+        if self.theme:
+            return self.extras.get('theme_code', '') or self.theme.code
+        return ''
+
+    @cached_property
+    def theme_name(self):
+        if self.theme:
+            return self.extras.get('theme_name', '') or self.theme.name
+        return ''
+
+    @cached_property
+    def sector_code(self):
+        if self.sector:
+            return self.extras.get('sector_code', '') or self.sector.code
+        return ''
+
+    @cached_property
+    def sector_name(self):
+        if self.sector:
+            return self.extras.get('sector_name', '') or self.sector.name
+        return ''
+
+    @cached_property
+    def root_sector_id(self):
+        return self.extras.get('root_sector_id', None)
+
+    @cached_property
+    def root_sector_code(self):
+        return self.extras.get('root_sector_code', '')
+
+    @cached_property
+    def root_sector_name(self):
+        return self.extras.get('root_sector_name', '')
+
+    @cached_property
     def target_code(self):
-        return self.extras.get('target_code', '') or self.target.code
+        if self.target:
+            return self.extras.get('target_code', '') or self.target.code
+        return ''
 
     @cached_property
     def target_name(self):
-        return self.extras.get('target_name', '') or self.target.name
+        if self.target:
+            return self.extras.get('target_name', '') or self.target.name
+        return ''
 
     @cached_property
     def goal(self):

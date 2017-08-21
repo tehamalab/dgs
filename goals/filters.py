@@ -1,6 +1,6 @@
 import django_filters
-from .models import (Plan, Goal, Target, Indicator, Component, Progress,
-                     Area, AreaType)
+from .models import (Plan, Goal, Theme, Sector, Target, Indicator, Component,
+                     Progress, Area, AreaType)
 
 
 class AreaFilter(django_filters.FilterSet):
@@ -30,6 +30,25 @@ class GoalFilter(django_filters.FilterSet):
         fields = ['plan', 'code']
 
 
+class ThemeFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='iexact')
+    description = django_filters.CharFilter(lookup_expr='icontains')
+    plan_code = django_filters.CharFilter(name='plans__code')
+
+    class Meta:
+        model = Theme
+        fields = ['plans', 'code']
+
+
+class SectorFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='iexact')
+    description = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = Sector
+        fields = ['parent']
+
+
 class TargetFilter(django_filters.FilterSet):
     description = django_filters.CharFilter(lookup_expr='icontains')
 
@@ -48,7 +67,7 @@ class IndicatorFilter(django_filters.FilterSet):
 
     class Meta:
         model = Indicator
-        fields = ['target', 'code']
+        fields = ['target', 'theme', 'sector', 'code']
 
 
 class ComponentFilter(django_filters.FilterSet):

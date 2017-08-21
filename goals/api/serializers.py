@@ -1,7 +1,7 @@
 from django.forms.models import model_to_dict
 from rest_framework import serializers
-from ..models import (Area, AreaType, Plan, Goal, Target,
-                      Indicator, Component, Progress)
+from ..models import (Area, AreaType, Plan, Theme, SectorType, Sector,
+                      Goal, Target, Indicator, Component, Progress)
 
 
 class ProgressSerializer(serializers.ModelSerializer):
@@ -45,6 +45,42 @@ class PlanSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Plan
+        fields = '__all__'
+
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
+
+
+class ThemeSerializer(serializers.ModelSerializer):
+    image_small = serializers.ImageField(read_only=True)
+    image_medium = serializers.ImageField(read_only=True)
+    image_large = serializers.ImageField(read_only=True)
+    plans_codes = serializers.ListField(read_only=True)
+    plans_names = serializers.ListField(read_only=True)
+    api_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Theme
+        exclude = []
+
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
+
+
+class SectorTypeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SectorType
+        fields = '__all__'
+
+
+class SectorSerializer(serializers.ModelSerializer):
+    api_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Sector
         fields = '__all__'
 
     def get_api_url(self, obj):

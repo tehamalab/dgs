@@ -31,7 +31,7 @@ class SearchViewSet(HaystackViewSet):
         'targets_names', 'goals_ids', 'goals_codes', 'goals_names',
         'plans_ids', 'plans_codes', 'plans_names', 'agency',
         'data_source', 'stats_available', 'object_type', 'created',
-        'last_modified', 'content',
+        'last_modified', 'content', 'parent', 'parent_name', 'level',
         'progress_count__gt','progress_count__lt',
         'progress_count__gte','progress_count__lte']
     boost_fields = {

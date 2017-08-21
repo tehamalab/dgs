@@ -1,6 +1,6 @@
 import json
 from import_export import widgets, resources, fields
-from .models import (Area, Goal, Target, Indicator)
+from .models import (Area, Goal, Theme, SectorType, Sector, Target, Indicator)
 
 
 class JSONWidget(widgets.Widget):
@@ -14,34 +14,55 @@ class JSONWidget(widgets.Widget):
         return json.loads(value)
 
 
-class GoalResource(resources.ModelResource):
+class BaseResource(resources.ModelResource):
     extras = fields.Field(attribute='extras', widget=JSONWidget())
+
+
+class GoalResource(BaseResource):
 
     class Meta:
         model = Goal
-        import_id_fields = ['code']
 
 
-class TargetResource(resources.ModelResource):
-    extras = fields.Field(attribute='extras', widget=JSONWidget())
+class ThemeResource(BaseResource):
+
+    class Meta:
+        model = Theme
+
+
+class SectorTypeResource(BaseResource):
+
+    class Meta:
+        model = SectorType
+
+
+class SectorResource(BaseResource):
+
+    class Meta:
+        model = Sector
+
+
+class GoalResource(BaseResource):
+
+    class Meta:
+        model = Goal
+
+
+class TargetResource(BaseResource):
 
     class Meta:
         model = Target
-        import_id_fields = ['code']
 
 
-class IndicatorResource(resources.ModelResource):
-    extras = fields.Field(attribute='extras', widget=JSONWidget())
+class IndicatorResource(BaseResource):
 
     class Meta:
         model = Indicator
-        import_id_fields = ['code']
 
 
-class AreaResource(resources.ModelResource):
+class AreaResource(BaseResource):
     parent = fields.Field(
         attribute='parent', widget=widgets.ForeignKeyWidget(Area))
-    extras = fields.Field(attribute='extras', widget=JSONWidget())
 
     class Meta:
         model = Area

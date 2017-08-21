@@ -4,12 +4,14 @@ from haystack_elasticsearch5 import indexes
 
 Plan = apps.get_registered_model('goals', 'Plan')
 Goal = apps.get_registered_model('goals', 'Goal')
+Theme = apps.get_registered_model('goals', 'Theme')
+Sector = apps.get_registered_model('goals', 'Sector')
 Target = apps.get_registered_model('goals', 'Target')
 Indicator = apps.get_registered_model('goals', 'Indicator')
 Component = apps.get_registered_model('goals', 'Component')
 
 
-class PlanIndex(indexes.CelerySearchIndex, indexes.Indexable):
+class BaseIndex(indexes.CelerySearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     code = indexes.CharField(model_attr='code', null=True)
     name = indexes.CharField(model_attr='name', null=True)
@@ -29,9 +31,6 @@ class PlanIndex(indexes.CelerySearchIndex, indexes.Indexable):
                                           null=True)
     object_type = indexes.CharField(faceted=True, null=True)
 
-    def get_model(self):
-        return Plan
-
     def get_updated_field(self):
         return 'last_modified'
 
@@ -39,7 +38,39 @@ class PlanIndex(indexes.CelerySearchIndex, indexes.Indexable):
         return self.get_model().__name__.lower()
 
 
-class GoalIndex(PlanIndex):
+class PlanIndex(BaseIndex, indexes.Indexable):
+
+    def get_model(self):
+        return Plan
+
+
+class ThemeIndex(BaseIndex, indexes.Indexable):
+    plans = indexes.MultiValueField(
+        model_attr='plans_ids', faceted=True, null=True)
+    plans_codes = indexes.MultiValueField(
+        model_attr='plans_codes', faceted=True, null=True)
+    plans_names = indexes.MultiValueField(
+        model_attr='plans_names', faceted=True, null=True)
+
+    def get_model(self):
+        return Theme
+
+    def prepare_plans(self, obj):
+        return list(obj.plans.values_list('id', flat=True))
+
+
+class SectorIndex(BaseIndex, indexes.Indexable):
+    parent = indexes.IntegerField(model_attr='parent_id', null=True,
+                                  faceted=True)
+    parent_name = indexes.IntegerField(model_attr='parent__name', null=True,
+                                       faceted=True)
+    level = indexes.IntegerField(model_attr='level', null=True, faceted=True)
+
+    def get_model(self):
+        return Sector
+
+
+class GoalIndex(BaseIndex, indexes.Indexable):
     plan = indexes.IntegerField(model_attr='plan_id',
                                 null=True, faceted=True)
     plan_code = indexes.CharField(model_attr='plan_code',
@@ -50,7 +81,7 @@ class GoalIndex(PlanIndex):
         return Goal
 
 
-class TargetIndex(GoalIndex):
+class TargetIndex(GoalIndex, indexes.Indexable):
     goal = indexes.IntegerField(model_attr='goal_id',
                                 null=True, faceted=True)
     goal_code = indexes.CharField(model_attr='goal_code',
@@ -64,7 +95,7 @@ class TargetIndex(GoalIndex):
         return Target
 
 
-class IndicatorIndex(TargetIndex):
+class IndicatorIndex(TargetIndex, indexes.Indexable):
     target = indexes.IntegerField(model_attr='target_id',
                                   null=True, faceted=True)
     target_code = indexes.CharField(model_attr='target_code',
@@ -88,7 +119,7 @@ class IndicatorIndex(TargetIndex):
         return obj.get_progress_count()
 
 
-class ComponentIndex(PlanIndex):
+class ComponentIndex(BaseIndex, indexes.Indexable):
     indicators = indexes.MultiValueField(faceted=True, null=True)
     indicators_names = indexes.MultiValueField(
         model_attr='indicators_names', faceted=True, null=True)
