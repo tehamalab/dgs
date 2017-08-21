@@ -593,6 +593,8 @@ class Indicator(models.Model):
         if self.sector:
             self.extras['sector_code'] = self.sector.code
             self.extras['sector_name'] = self.sector.name
+            self.extras['sector_type_code'] = self.sector.type.code
+            self.extras['sector_type_name'] = self.sector.type.name
             self.extras['root_sector_id'] = self.sector.get_root().id
             self.extras['root_sector_code'] = self.sector.get_root().code
             self.extras['root_sector_name'] = self.sector.get_root().name
@@ -644,31 +646,31 @@ class Indicator(models.Model):
 
     @cached_property
     def theme_code(self):
-        if self.theme:
-            return self.extras.get('theme_code', '') or self.theme.code
-        return ''
+        return self.extras.get('theme_code', '')
 
     @cached_property
     def theme_name(self):
-        if self.theme:
-            return self.extras.get('theme_name', '') or self.theme.name
-        return ''
+        return self.extras.get('theme_name', '')
+
+    @cached_property
+    def sector_type_code(self):
+        return self.extras.get('sector_type_code', '')
+
+    @cached_property
+    def sector_type_name(self):
+        return self.extras.get('sector_type_name', '')
 
     @cached_property
     def sector_code(self):
-        if self.sector:
-            return self.extras.get('sector_code', '') or self.sector.code
-        return ''
+        return self.extras.get('sector_code', '')
 
     @cached_property
     def sector_name(self):
-        if self.sector:
-            return self.extras.get('sector_name', '') or self.sector.name
-        return ''
+        return self.extras.get('sector_name', '')
 
     @cached_property
     def root_sector_id(self):
-        return self.extras.get('root_sector_id', None)
+        return int(self.extras.get('root_sector_id', '0')) or None
 
     @cached_property
     def root_sector_code(self):
@@ -680,47 +682,48 @@ class Indicator(models.Model):
 
     @cached_property
     def target_code(self):
-        if self.target:
-            return self.extras.get('target_code', '') or self.target.code
-        return ''
+        return self.extras.get('target_code', '')
 
     @cached_property
     def target_name(self):
-        if self.target:
-            return self.extras.get('target_name', '') or self.target.name
-        return ''
+        return self.extras.get('target_name', '')
 
     @cached_property
     def goal(self):
-        return self.target.goal
+        if self.target:
+            return self.target.goal
+        return None
 
     @cached_property
     def goal_id(self):
-        return int(self.extras.get('goal_id', '0')) or self.goal.id
+        return int(self.extras.get('goal_id', '0')) or None
 
     @cached_property
     def goal_code(self):
-        return self.extras.get('goal_code', '') or self.goal.code
+        return self.extras.get('goal_code', '')
 
     @cached_property
     def goal_name(self):
-        return self.extras.get('goal_name', '') or self.goal.name
+        return self.extras.get('goal_name', '')
 
     @cached_property
     def plan(self):
-        return self.target.goal.plan
+        if self.target:
+            return self.target.goal.plan
+        return None
 
     @cached_property
     def plan_id(self):
-        return int(self.extras.get('plan_id', '0')) or self.goal.plan_id
+        return int(self.extras.get('plan_id', '0')) or None
 
     @cached_property
     def plan_code(self):
-        return self.extras.get('plan_code', '') or self.goal.plan_code
+        return self.extras.get('plan_code', '')
+
 
     @cached_property
     def plan_name(self):
-        return self.extras.get('plan_name', '') or self.goal.plan_name
+        return self.extras.get('plan_name', '')
 
     def get_progress_count(self):
         return Progress.objects.filter(component__indicators=self.id).count()
