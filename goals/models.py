@@ -547,7 +547,7 @@ class Target(models.Model):
 class Indicator(models.Model):
     theme = models.ForeignKey('goals.Theme', verbose_name=_('Theme'),
                               related_name='indicators', null=True)
-    sector = models.ForeignKey('goals.Sector', verbose_name=_('Theme'),
+    sector = models.ForeignKey('goals.Sector', verbose_name=_('Sector'),
                               related_name='indicators', null=True)
     target = models.ForeignKey(Target, verbose_name=_('Target'),
                                related_name='indicators', null=True)
