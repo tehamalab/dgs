@@ -357,8 +357,7 @@ class Sector(MPTTModel):
 class Goal(models.Model):
     plan = models.ForeignKey('goals.Plan', verbose_name='plan',
                              related_name='goals')
-    code = models.CharField(_('Goal number'), max_length=10,
-                            unique=True)
+    code = models.CharField(_('Goal number'), max_length=10)
     name = models.CharField(_('Goal name'), max_length=255)
     description = models.TextField(_('Goal description'), blank=True)
     image = models.ImageField(_('Image'),
@@ -384,6 +383,7 @@ class Goal(models.Model):
     class Meta:
         verbose_name = _('Goal')
         verbose_name_plural = _('Goals')
+        unique_together = ['code', 'plan']
 
     def __str__(self):
         return self.name
@@ -443,8 +443,7 @@ class Goal(models.Model):
 class Target(models.Model):
     goal = models.ForeignKey(Goal, verbose_name=_('Goal'),
                              related_name='targets')
-    code = models.CharField(_('Target number'), max_length=10,
-                            unique=True)
+    code = models.CharField(_('Target number'), max_length=10)
     name = models.CharField(_('Target'), max_length=255)
     description = models.TextField(_('Target description'),
                                   blank=True)
@@ -471,6 +470,7 @@ class Target(models.Model):
     class Meta:
         verbose_name = _('Target')
         verbose_name_plural = _('Targets')
+        unique_together = ['code', 'goal']
 
     def __str__(self):
         return '%s %s : %s' %(self.plan_code, self.code, truncatechars(self.description, 50))
@@ -553,8 +553,7 @@ class Indicator(models.Model):
     target = models.ForeignKey(Target, verbose_name=_('Target'),
                                related_name='indicators', null=True)
     name = models.CharField(_('Indicator'), max_length=255)
-    code = models.CharField(_('Indicator number'), max_length=10,
-                            unique=True)
+    code = models.CharField(_('Indicator number'), max_length=10)
     description = models.TextField(_('Indicator description'),
                                   blank=True)
     image = models.ImageField(_('Image'),
@@ -580,6 +579,7 @@ class Indicator(models.Model):
     class Meta:
         verbose_name = _('Indicator')
         verbose_name_plural = _('Indicators')
+        unique_together = ['code', 'target', 'sector', 'theme']
 
     def __str__(self):
         return '%s %s : %s' \
