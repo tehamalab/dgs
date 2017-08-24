@@ -215,11 +215,12 @@ class Theme(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.get_slug()
+        super(Theme, self).save(*args, **kwargs)
         plans = self.plans.all()
         self.extras['plans_ids'] = json.dumps([i.id for i in plans])
         self.extras['plans_names'] = json.dumps([i.name for i in plans])
         self.extras['plans_codes'] = json.dumps([i.code for i in plans])
-        super(Theme, self).save(*args, **kwargs)
+        Theme.objects.filter(id=self.id).update(extras=self.extras)
 
     @cached_property
     def plans_ids(self):
@@ -231,7 +232,7 @@ class Theme(models.Model):
 
     @cached_property
     def plans_codes_str(self):
-        return json.loads(self.extras.get('plans_codes', '[]')).join(', ')
+        return ', '.join(json.loads(self.extras.get('plans_codes', '[]')))
 
     @cached_property
     def plans_names(self):
@@ -793,6 +794,7 @@ class Component(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.get_slug()
+        super(Component, self).save(*args, **kwargs)
         indctrs = self.indicators\
             .prefetch_related('target', 'target__goal', 'target__goal__plan')
         self.extras['indicators_codes'] = json.dumps([i.code for i in indctrs])
@@ -806,7 +808,7 @@ class Component(models.Model):
         self.extras['plans_ids'] = json.dumps([i.target.goal.plan.id for i in indctrs])
         self.extras['plans_codes'] = json.dumps([i.target.goal.plan.code for i in indctrs])
         self.extras['plans_names'] = json.dumps([i.target.goal.plan.name for i in indctrs])
-        super(Component, self).save(*args, **kwargs)
+        Component.objects.filter(id=self.id).update(extras=self.extras)
 
     def get_slug(self):
         if not self.slug:
