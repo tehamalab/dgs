@@ -1,5 +1,7 @@
 import json
 from django.db import models
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.contrib.postgres.fields import HStoreField, ArrayField
 from django.utils.translation import ugettext_lazy as _
@@ -216,11 +218,6 @@ class Theme(models.Model):
         if not self.slug:
             self.slug = self.get_slug()
         super(Theme, self).save(*args, **kwargs)
-        plans = self.plans.all()
-        self.extras['plans_ids'] = json.dumps([i.id for i in plans])
-        self.extras['plans_names'] = json.dumps([i.name for i in plans])
-        self.extras['plans_codes'] = json.dumps([i.code for i in plans])
-        Theme.objects.filter(id=self.id).update(extras=self.extras)
 
     @cached_property
     def plans_ids(self):
@@ -795,20 +792,6 @@ class Component(models.Model):
         if not self.slug:
             self.slug = self.get_slug()
         super(Component, self).save(*args, **kwargs)
-        indctrs = self.indicators\
-            .prefetch_related('target', 'target__goal', 'target__goal__plan')
-        self.extras['indicators_codes'] = json.dumps([i.code for i in indctrs])
-        self.extras['indicators_names'] = json.dumps([i.name for i in indctrs])
-        self.extras['targets_ids'] = json.dumps([i.target.id for i in indctrs])
-        self.extras['targets_codes'] = json.dumps([i.target.code for i in indctrs])
-        self.extras['targets_names'] = json.dumps([i.target.name for i in indctrs])
-        self.extras['goals_ids'] = json.dumps([i.target.goal.id for i in indctrs])
-        self.extras['goals_codes'] = json.dumps([i.target.goal.code for i in indctrs])
-        self.extras['goals_names'] = json.dumps([i.target.goal.name for i in indctrs])
-        self.extras['plans_ids'] = json.dumps([i.target.goal.plan.id for i in indctrs])
-        self.extras['plans_codes'] = json.dumps([i.target.goal.plan.code for i in indctrs])
-        self.extras['plans_names'] = json.dumps([i.target.goal.plan.name for i in indctrs])
-        Component.objects.filter(id=self.id).update(extras=self.extras)
 
     def get_slug(self):
         if not self.slug:
@@ -977,3 +960,32 @@ class Progress(models.Model):
     @cached_property
     def value_unit(self):
         return self.extras.get('value_unit', '')
+
+
+@receiver(m2m_changed, sender=Theme.plans.through)
+def theme_plans_changed(sender, instance, action, **kwargs):
+    if action == 'post_add':
+        plans = instance.plans.all()
+        instance.extras['plans_ids'] = json.dumps([i.id for i in plans])
+        instance.extras['plans_names'] = json.dumps([i.name for i in plans])
+        instance.extras['plans_codes'] = json.dumps([i.code for i in plans])
+        Theme.objects.filter(id=instance.id).update(extras=instance.extras)
+
+
+@receiver(m2m_changed, sender=Component.indicators.through)
+def component_indicators_changed(sender, instance, action, **kwargs):
+    if action == 'post_add':
+        indctrs = instance.indicators\
+            .prefetch_related('target', 'target__goal', 'target__goal__plan')
+        instance.extras['indicators_codes'] = json.dumps([i.code for i in indctrs])
+        instance.extras['indicators_names'] = json.dumps([i.name for i in indctrs])
+        instance.extras['targets_ids'] = json.dumps([i.target.id for i in indctrs])
+        instance.extras['targets_codes'] = json.dumps([i.target.code for i in indctrs])
+        instance.extras['targets_names'] = json.dumps([i.target.name for i in indctrs])
+        instance.extras['goals_ids'] = json.dumps([i.target.goal.id for i in indctrs])
+        instance.extras['goals_codes'] = json.dumps([i.target.goal.code for i in indctrs])
+        instance.extras['goals_names'] = json.dumps([i.target.goal.name for i in indctrs])
+        instance.extras['plans_ids'] = json.dumps([i.target.goal.plan.id for i in indctrs])
+        instance.extras['plans_codes'] = json.dumps([i.target.goal.plan.code for i in indctrs])
+        instance.extras['plans_names'] = json.dumps([i.target.goal.plan.name for i in indctrs])
+        Component.objects.filter(id=instance.id).update(extras=instance.extras)
