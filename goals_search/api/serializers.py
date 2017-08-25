@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from drf_haystack.serializers import HaystackSerializer
-from ..search_indexes import (PlanIndex, GoalIndex, TargetIndex,
-                              IndicatorIndex, ComponentIndex)
+from ..search_indexes import (PlanIndex, GoalIndex, ThemeIndex, SectorIndex,
+                              TargetIndex, IndicatorIndex, ComponentIndex)
 
 
 class SearchResultSerializer(HaystackSerializer):
@@ -9,8 +9,8 @@ class SearchResultSerializer(HaystackSerializer):
     api_url = serializers.SerializerMethodField()
 
     class Meta:
-        index_classes = [PlanIndex, GoalIndex, TargetIndex,
-                         IndicatorIndex, ComponentIndex]
+        index_classes = [PlanIndex, ThemeIndex, SectorIndex, GoalIndex,
+                         TargetIndex, IndicatorIndex, ComponentIndex]
         fields = ['code', 'name', 'description', 'slug',
                   'image', 'image_small', 'image_medium', 'image_large',
                   'plan', 'plan_code', 'plan_id', 'plan_name',
