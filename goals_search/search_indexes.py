@@ -62,8 +62,8 @@ class ThemeIndex(BaseIndex, indexes.Indexable):
 class SectorIndex(BaseIndex, indexes.Indexable):
     parent = indexes.IntegerField(model_attr='parent_id', null=True,
                                   faceted=True)
-    parent_name = indexes.IntegerField(model_attr='parent__name', null=True,
-                                       faceted=True)
+    parent_name = indexes.CharField(model_attr='parent__name', null=True,
+                                    faceted=True)
     level = indexes.IntegerField(model_attr='level', null=True, faceted=True)
 
     def get_model(self):
