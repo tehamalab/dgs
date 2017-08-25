@@ -96,6 +96,32 @@ class TargetIndex(GoalIndex, indexes.Indexable):
 
 
 class IndicatorIndex(TargetIndex, indexes.Indexable):
+    theme = indexes.IntegerField(model_attr='theme_id',
+                                 null=True, faceted=True)
+    theme_name = indexes.CharField(model_attr='theme_name',
+                                   null=True, faceted=True)
+    sector = indexes.IntegerField(model_attr='sector_id',
+                                  null=True, faceted=True)
+    sector_name = indexes.CharField(model_attr='sector_name',
+                                    null=True, faceted=True)
+    sector_code = indexes.CharField(model_attr='sector_code',
+                                    null=True, faceted=True)
+    sectors_names = indexes.MultiValueField(
+        model_attr='sectors_names', faceted=True, null=True)
+    sectors_ids = indexes.MultiValueField(
+        model_attr='sectors_ids', faceted=True, null=True)
+    sectors_codes = indexes.MultiValueField(
+        model_attr='sectors_codes', faceted=True, null=True)
+    sector_type_code = indexes.CharField(
+        model_attr='sector_type_code', faceted=True, null=True)
+    sector_type_name = indexes.CharField(
+        model_attr='sector_type_name', faceted=True, null=True)
+    root_sector_id = indexes.IntegerField(model_attr='root_sector_id',
+                                          null=True, faceted=True)
+    root_sector_code = indexes.CharField(model_attr='root_sector_code',
+                                         null=True, faceted=True)
+    root_sector_name = indexes.CharField(model_attr='root_sector_name',
+                                         null=True, faceted=True)
     target = indexes.IntegerField(model_attr='target_id',
                                   null=True, faceted=True)
     target_code = indexes.CharField(model_attr='target_code',

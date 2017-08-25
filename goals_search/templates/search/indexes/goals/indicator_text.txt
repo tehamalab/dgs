@@ -3,5 +3,14 @@
 {{ object.description }}
 
 {{ object.plan_name }}
+{{ object.theme_name }}
 {{ object.goal_name }}
 {{ object.target_name }}
+
+{% for sector in object.sectors_names %}
+    {{ sector }}
+{% endfor %}
+
+{% for sector in object.sectors_codes %}
+    {{ sector }}
+{% endfor %}

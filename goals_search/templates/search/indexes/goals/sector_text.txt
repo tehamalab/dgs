@@ -1,0 +1,9 @@
+{{ object.name }}
+{{ object.code }}
+{{ object.description }}
+{{ object.type_name }}
+{{ object.type_code }}
+
+{% for ancestor in object.get_ancestors %}
+    {{ ancestor.name }}
+{% endfor %}

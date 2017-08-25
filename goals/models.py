@@ -9,6 +9,7 @@ from django.template.defaultfilters import slugify, truncatechars
 from django.utils.functional import cached_property
 from django.core.urlresolvers import reverse
 from mptt.models import MPTTModel, TreeForeignKey
+from mptt.signals import node_moved
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
 
@@ -342,6 +343,29 @@ class Sector(MPTTModel):
         return self.slug
 
     @cached_property
+    def type_code(self):
+        return self.extras.get('type_code', '') or self.type.code
+
+    @cached_property
+    def type_name(self):
+        return self.extras.get('type_name', '') or self.type.name
+
+    @cached_property
+    def ancestors_ids(self):
+        return json.loads(extras.get('ancestors_ids', '[]'))\
+            or [ancestor.id for ancestor in self.get_ancestors()]
+
+    @cached_property
+    def ancestors_codes(self):
+        return json.loads(extras.get('ancestors_codes', '[]'))\
+            or [ancestor.code for ancestor in self.get_ancestors()]
+
+    @cached_property
+    def ancestors_names(self):
+        return json.loads(extras.get('ancestors_names', '[]'))\
+            or [ancestor.name for ancestor in self.get_ancestors()]
+
+    @cached_property
     def api_url(self):
         try:
             return reverse('sector-detail', args=[self.pk])
@@ -591,6 +615,9 @@ class Indicator(models.Model):
         if self.sector:
             self.extras['sector_code'] = self.sector.code
             self.extras['sector_name'] = self.sector.name
+            self.extras['sectors_ids'] = json.dumps([self.sector_id] + self.sector.ancestors_ids)
+            self.extras['sectors_codes'] = json.dumps([self.sector.code] + self.sector.ancestors_codes)
+            self.extras['sectors_names'] = json.dumps([self.sector.name] + self.sector.ancestors_names)
             self.extras['sector_type_code'] = self.sector.type.code
             self.extras['sector_type_name'] = self.sector.type.name
             self.extras['root_sector_id'] = self.sector.get_root().id
@@ -649,6 +676,24 @@ class Indicator(models.Model):
     @cached_property
     def theme_name(self):
         return self.extras.get('theme_name', '')
+
+    @cached_property
+    def sectors_ids(self):
+        if self.sector:
+            return json.loads(self.extras.get('sectors_ids', '[]'))
+        return []
+
+    @cached_property
+    def sectors_names(self):
+        if self.sector:
+            return json.loads(self.extras.get('sectors_names', '[]'))
+        return []
+
+    @cached_property
+    def sectors_codes(self):
+        if self.sector:
+            return json.loads(self.extras.get('sectors_codes', '[]'))
+        return []
 
     @cached_property
     def sector_type_code(self):
@@ -989,3 +1034,14 @@ def component_indicators_changed(sender, instance, action, **kwargs):
         instance.extras['plans_codes'] = json.dumps([i.target.goal.plan.code for i in indctrs])
         instance.extras['plans_names'] = json.dumps([i.target.goal.plan.name for i in indctrs])
         Component.objects.filter(id=instance.id).update(extras=instance.extras)
+
+
+@receiver(node_moved, sender=Sector)
+def sector_node_moved(sender, instance, **kwargs):
+    instance.extras['ancestors_ids'] = json.dumps(
+        [ancestor.id for ancestor in instance.get_ancestors()])
+    instance.extras['ancestors_codes'] = json.dumps(
+        [ancestor.code for ancestor in instance.get_ancestors()])
+    instance.extras['ancestors_names'] = json.dumps(
+        [ancestor.name for ancestor in instance.get_ancestors()])
+    Sector.objects.filter(id=instance.id).update(extras=instance.extras)
