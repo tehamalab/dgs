@@ -372,17 +372,17 @@ class Sector(MPTTModel):
 
     @cached_property
     def ancestors_ids(self):
-        return json.loads(extras.get('ancestors_ids', '[]'))\
+        return json.loads(self.extras.get('ancestors_ids', '[]'))\
             or [ancestor.id for ancestor in self.get_ancestors()]
 
     @cached_property
     def ancestors_codes(self):
-        return json.loads(extras.get('ancestors_codes', '[]'))\
+        return json.loads(self.extras.get('ancestors_codes', '[]'))\
             or [ancestor.code for ancestor in self.get_ancestors()]
 
     @cached_property
     def ancestors_names(self):
-        return json.loads(extras.get('ancestors_names', '[]'))\
+        return json.loads(self.extras.get('ancestors_names', '[]'))\
             or [ancestor.name for ancestor in self.get_ancestors()]
 
     @cached_property
@@ -646,12 +646,14 @@ class Indicator(models.Model):
         if self.target:
             self.extras['target_code'] = self.target.code
             self.extras['target_name'] = self.target.name
-        self.extras['goal_id'] = self.goal.id
-        self.extras['goal_code'] = self.goal.code
-        self.extras['goal_name'] = self.goal.name
-        self.extras['plan_id'] = self.plan.id
-        self.extras['plan_code'] = self.plan.code
-        self.extras['plan_name'] = self.plan.name
+        if self.goal:
+            self.extras['goal_id'] = self.goal.id
+            self.extras['goal_code'] = self.goal.code
+            self.extras['goal_name'] = self.goal.name
+        if self.plan:
+            self.extras['plan_id'] = self.plan.id
+            self.extras['plan_code'] = self.plan.code
+            self.extras['plan_name'] = self.plan.name
         super(Indicator, self).save(*args, **kwargs)
 
     def get_slug(self):
