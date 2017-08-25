@@ -343,6 +343,26 @@ class Sector(MPTTModel):
         return self.slug
 
     @cached_property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+
+    @cached_property
+    def image_small_url(self):
+        if self.image_small:
+            return self.image_small.url
+
+    @cached_property
+    def image_medium_url(self):
+        if self.image_medium:
+            return self.image_medium.url
+
+    @cached_property
+    def image_large_url(self):
+        if self.image_large:
+            return self.image_large.url
+
+    @cached_property
     def type_code(self):
         return self.extras.get('type_code', '') or self.type.code
 
