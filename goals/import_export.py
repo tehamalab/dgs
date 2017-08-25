@@ -37,6 +37,8 @@ class SectorTypeResource(BaseResource):
 
 
 class SectorResource(BaseResource):
+    parent = fields.Field(
+        attribute='parent', widget=widgets.ForeignKeyWidget(Sector))
 
     class Meta:
         model = Sector

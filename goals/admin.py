@@ -62,10 +62,7 @@ class ThemeAdmin(ImportExportModelAdmin):
 
 class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     resource_class = SectorResource
-    ordering = ['id']
     search_fields = ['^code', 'name', 'description']
-    list_display = ['code', 'name', 'description']
-    list_display_links = ['code', 'name']
 
 
 class SectorTypeAdmin(ImportExportModelAdmin):
