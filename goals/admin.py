@@ -32,7 +32,7 @@ class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
 
 class PlanAdmin(ImportExportModelAdmin):
     search_fields = ['^code', 'name']
-    list_display = ['code', 'name', 'description']
+    list_display = ['code', 'name']
     list_display_links = ['code', 'name']
     prepopulated_fields = {"slug": ("name",)}
 
