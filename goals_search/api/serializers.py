@@ -11,7 +11,7 @@ class SearchResultSerializer(HaystackSerializer):
     class Meta:
         index_classes = [PlanIndex, ThemeIndex, SectorIndex, GoalIndex,
                          TargetIndex, IndicatorIndex, ComponentIndex]
-        fields = ['code', 'name', 'description', 'slug',
+        fields = ['code', 'name', 'caption', 'description', 'slug',
                   'image', 'image_small', 'image_medium', 'image_large',
                   'plan', 'plan_code', 'plan_id', 'plan_name',
                   'goal', 'goal_code', 'goal_id', 'goal_name',

@@ -39,6 +39,7 @@ class BaseIndex(indexes.CelerySearchIndex):
 
 
 class PlanIndex(BaseIndex, indexes.Indexable):
+    caption = indexes.CharField(model_attr='caption', null=True)
 
     def get_model(self):
         return Plan

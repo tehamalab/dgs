@@ -15,7 +15,7 @@ class AreaTranslationOptions(TranslationOptions):
 
 @register(Plan)
 class PlanTranslationOptions(TranslationOptions):
-    fields = ('name', 'description', 'image')
+    fields = ('name', 'caption', 'description', 'image')
 
 
 @register(Goal)

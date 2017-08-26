@@ -113,6 +113,7 @@ class Plan(models.Model):
     code = models.CharField(_('code'), max_length=10,
                             unique=True)
     name = models.CharField(_('Name'), max_length=255)
+    caption = models.TextField(_('Caption'), blank=True)
     description = models.TextField(_('Description'), blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/goals/images',
