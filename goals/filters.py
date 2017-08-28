@@ -46,7 +46,7 @@ class SectorFilter(django_filters.FilterSet):
 
     class Meta:
         model = Sector
-        fields = ['parent']
+        fields = ['parent', 'theme']
 
 
 class TargetFilter(django_filters.FilterSet):

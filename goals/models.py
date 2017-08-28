@@ -294,6 +294,8 @@ class SectorType(models.Model):
 
 
 class Sector(MPTTModel):
+    themes = models.ManyToManyField('goals.Theme', verbose_name='Themes',
+                                    related_name='sectors')
     parent = TreeForeignKey('self', null=True, blank=True,
                             related_name='children', db_index=True)
     name = models.CharField(_('Sector name'), max_length=255)
@@ -335,6 +337,8 @@ class Sector(MPTTModel):
         if self.type:
             self.extras['type_code'] = self.type.code
             self.extras['type_name'] = self.type.name
+        if self.parent:
+            self.extras['parent_name'] = self.parent.name
         super(Sector, self).save(*args, **kwargs)
 
     def get_slug(self):
@@ -370,6 +374,12 @@ class Sector(MPTTModel):
     @cached_property
     def type_name(self):
         return self.extras.get('type_name', '') or self.type.name
+
+    @cached_property
+    def parent_name(self):
+        if self.parent:
+            return self.extras.get('parent_name', '') or self.parent.name
+        return ''
 
     @cached_property
     def ancestors_ids(self):
