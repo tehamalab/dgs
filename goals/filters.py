@@ -1,6 +1,21 @@
+from django import forms
+from django.contrib.postgres.forms import SimpleArrayField
 import django_filters
 from .models import (Plan, Goal, Theme, Sector, Target, Indicator, Component,
                      Progress, Area, AreaType)
+
+
+class SimpleIntegerArrayField(SimpleArrayField):
+
+    def __init__(self, base_field=forms.IntegerField(), delimiter=',',
+                 max_length=None, min_length=None, *args, **kwargs):
+        super(SimpleIntegerArrayField, self).__init__(
+            base_field=base_field, delimiter=delimiter,
+            max_length=max_length, min_length=min_length, *args, **kwargs)
+
+
+class IntegerArrayFilter(django_filters.Filter):
+    field_class = SimpleIntegerArrayField
 
 
 class AreaFilter(django_filters.FilterSet):
@@ -64,6 +79,7 @@ class IndicatorFilter(django_filters.FilterSet):
     data_source = django_filters.CharFilter(lookup_expr='icontains')
     agency = django_filters.CharFilter(lookup_expr='iexact')
     progress_count = django_filters.NumberFilter(lookup_expr='gte')
+    sectors_ids = IntegerArrayFilter(lookup_expr='contains')
 
     class Meta:
         model = Indicator

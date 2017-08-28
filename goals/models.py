@@ -629,6 +629,9 @@ class Indicator(models.Model):
     last_modified = models.DateTimeField(_('Last modified'),
                                          auto_now=True)
     extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+    sectors_ids = ArrayField(
+        models.IntegerField(), null=True, blank=True, editable=False,
+        verbose_name=_('Sectors ids'), default=[])
 
     class Meta:
         verbose_name = _('Indicator')
@@ -646,11 +649,11 @@ class Indicator(models.Model):
             self.extras['theme_code'] = self.theme.code
             self.extras['theme_name'] = self.theme.name
         if self.sector:
+            self.sectors_ids = self.sector.ancestors_ids + [self.sector_id]
             self.extras['sector_code'] = self.sector.code
             self.extras['sector_name'] = self.sector.name
-            self.extras['sectors_ids'] = json.dumps([self.sector_id] + self.sector.ancestors_ids)
-            self.extras['sectors_codes'] = json.dumps([self.sector.code] + self.sector.ancestors_codes)
-            self.extras['sectors_names'] = json.dumps([self.sector.name] + self.sector.ancestors_names)
+            self.extras['sectors_codes'] = json.dumps(self.sector.ancestors_codes + [self.sector.code])
+            self.extras['sectors_names'] = json.dumps(self.sector.ancestors_names + [self.sector.name])
             self.extras['sector_type_code'] = self.sector.type.code
             self.extras['sector_type_name'] = self.sector.type.name
             self.extras['root_sector_id'] = self.sector.get_root().id
@@ -711,12 +714,6 @@ class Indicator(models.Model):
     @cached_property
     def theme_name(self):
         return self.extras.get('theme_name', '')
-
-    @cached_property
-    def sectors_ids(self):
-        if self.sector:
-            return json.loads(self.extras.get('sectors_ids', '[]'))
-        return []
 
     @cached_property
     def sectors_names(self):
