@@ -113,7 +113,7 @@ class Plan(models.Model):
     code = models.CharField(_('code'), max_length=10,
                             unique=True)
     name = models.CharField(_('Name'), max_length=255)
-    caption = models.TextField(_('Caption'), blank=True)
+    caption = models.CharField(_('Caption'), max_length=255, blank=True)
     description = models.TextField(_('Description'), blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/goals/images',
@@ -188,6 +188,7 @@ class Theme(models.Model):
                                    related_name='themes')
     name = models.CharField(_('Theme name'), max_length=255)
     code = models.CharField(_('Theme number'), max_length=10)
+    caption = models.CharField(_('Caption'), max_length=255, blank=True)
     description = models.TextField(_('Theme description'), blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/themes/images',
@@ -411,6 +412,7 @@ class Goal(models.Model):
                              related_name='goals')
     code = models.CharField(_('Goal number'), max_length=10)
     name = models.CharField(_('Goal name'), max_length=255)
+    caption = models.CharField(_('Caption'), max_length=255, blank=True)
     description = models.TextField(_('Goal description'), blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/goals/images',

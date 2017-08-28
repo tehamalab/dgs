@@ -20,21 +20,21 @@ class PlanTranslationOptions(TranslationOptions):
 
 @register(Goal)
 class GoalTranslationOptions(TranslationOptions):
-    fields = ('name', 'description', 'image')
+    fields = ('name', 'caption', 'description', 'image')
 
 
 @register(Theme)
 class ThemeTranslationOptions(TranslationOptions):
-    fields = ('name', 'description', 'image')
+    fields = ('name', 'caption', 'description', 'image')
 
 
 @register(Sector)
-class ThemeTranslationOptions(TranslationOptions):
+class SectorTranslationOptions(TranslationOptions):
     fields = ('name', 'description', 'image')
 
 
 @register(SectorType)
-class ThemeTranslationOptions(TranslationOptions):
+class SectorTypeTranslationOptions(TranslationOptions):
     fields = ('name', 'description')
 
 

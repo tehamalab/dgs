@@ -46,6 +46,7 @@ class PlanIndex(BaseIndex, indexes.Indexable):
 
 
 class ThemeIndex(BaseIndex, indexes.Indexable):
+    caption = indexes.CharField(model_attr='caption', null=True)
     plans = indexes.MultiValueField(
         model_attr='plans_ids', faceted=True, null=True)
     plans_codes = indexes.MultiValueField(
@@ -72,6 +73,7 @@ class SectorIndex(BaseIndex, indexes.Indexable):
 
 
 class GoalIndex(BaseIndex, indexes.Indexable):
+    caption = indexes.CharField(model_attr='caption', null=True)
     plan = indexes.IntegerField(model_attr='plan_id',
                                 null=True, faceted=True)
     plan_code = indexes.CharField(model_attr='plan_code',
