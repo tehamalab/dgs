@@ -84,7 +84,13 @@ class GoalIndex(BaseIndex, indexes.Indexable):
         return Goal
 
 
-class TargetIndex(GoalIndex, indexes.Indexable):
+class TargetIndex(BaseIndex, indexes.Indexable):
+    plan = indexes.IntegerField(model_attr='plan_id',
+                                null=True, faceted=True)
+    plan_code = indexes.CharField(model_attr='plan_code',
+                                  null=True, faceted=True)
+    plan_name = indexes.CharField(model_attr='plan_name',
+                                  null=True, faceted=True)
     goal = indexes.IntegerField(model_attr='goal_id',
                                 null=True, faceted=True)
     goal_code = indexes.CharField(model_attr='goal_code',
