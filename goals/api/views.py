@@ -37,7 +37,6 @@ class AreaViewSet(ModelViewSet):
     serializer_class = AreaSerializer
     filter_class = AreaFilter
     ordering_fields = ('id', 'code', 'name', 'type')
-    ordering = ('name',)
 
 
 class PlanViewSet(ModelViewSet):
@@ -68,7 +67,6 @@ class SectorViewSet(ModelViewSet):
     serializer_class = SectorSerializer
     filter_class = SectorFilter
     ordering_fields = ('id', 'code', 'name')
-    ordering = ('id',)
 
 
 class GoalViewSet(ModelViewSet):
