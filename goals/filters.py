@@ -80,7 +80,7 @@ class IndicatorFilter(django_filters.FilterSet):
 
     class Meta:
         model = Indicator
-        fields = ['target', 'theme', 'sector', 'code']
+        fields = ['plan_id', 'theme', 'target', 'sector', 'code']
 
 
 class ComponentFilter(django_filters.FilterSet):

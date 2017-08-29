@@ -625,6 +625,8 @@ class Indicator(models.Model):
     sectors_ids = ArrayField(
         models.IntegerField(), null=True, blank=True, editable=False,
         verbose_name=_('Sectors ids'), default=[])
+    plan_id = models.IntegerField(_('Plan ID'), null=True, blank=True,
+                                  editable=False)
 
     class Meta:
         verbose_name = _('Indicator')
@@ -636,6 +638,7 @@ class Indicator(models.Model):
             %(self.plan_code, self.code, truncatechars(self.description, 50))
 
     def save(self, *args, **kwargs):
+        self.clean()
         if not self.slug:
             self.slug = self.get_slug()
         if self.theme:
@@ -660,10 +663,16 @@ class Indicator(models.Model):
             self.extras['goal_code'] = self.goal.code
             self.extras['goal_name'] = self.goal.name
         if self.plan:
-            self.extras['plan_id'] = self.plan.id
+            self.plan_id = self.plan.id
             self.extras['plan_code'] = self.plan.code
             self.extras['plan_name'] = self.plan.name
         super(Indicator, self).save(*args, **kwargs)
+
+    def clean(self):
+        if self.theme and self.target:
+            if self.theme.plan_id != self.target.goal.plan_id:
+                raise ValidationError(
+                    _('Theme and Target must belong to the same plan'))
 
     def get_slug(self):
         if not self.slug:
@@ -778,11 +787,9 @@ class Indicator(models.Model):
     def plan(self):
         if self.target:
             return self.target.goal.plan
+        elif self.theme:
+            return self.theme.plan
         return None
-
-    @cached_property
-    def plan_id(self):
-        return int(self.extras.get('plan_id', '0')) or None
 
     @cached_property
     def plan_code(self):
