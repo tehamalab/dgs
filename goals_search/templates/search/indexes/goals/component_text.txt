@@ -3,6 +3,7 @@
 {{ object.description }}
 
 {{ object.plans_names|join:", " }}
+{{ object.plans_codes|join:", " }}
 {{ object.goals_names|join:", " }}
 {{ object.targets_names|join:", " }}
 {{ object.indicators_names|join:", " }}

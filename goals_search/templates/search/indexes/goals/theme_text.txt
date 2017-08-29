@@ -3,3 +3,4 @@
 {{ object.description }}
 
 {{ object.plan.name }}
+{{ object.plan.code }}

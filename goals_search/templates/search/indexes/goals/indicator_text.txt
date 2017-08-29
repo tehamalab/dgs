@@ -3,6 +3,7 @@
 {{ object.description }}
 
 {{ object.plan_name }}
+{{ object.plan_code }}
 {{ object.theme_name }}
 {{ object.goal_name }}
 {{ object.target_name }}
