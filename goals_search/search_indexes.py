@@ -1,6 +1,6 @@
 from django.apps import apps
 from django.db.models import Count
-from haystack_elasticsearch5 import indexes
+from haystack_es import indexes
 
 Plan = apps.get_registered_model('goals', 'Plan')
 Goal = apps.get_registered_model('goals', 'Goal')

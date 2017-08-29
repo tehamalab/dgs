@@ -114,7 +114,7 @@ DATABASES = {
 # Haystack
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': os.environ.get('HAYSTACK_DEFAULT_ENGINE', 'haystack_elasticsearch5.Elasticsearch5SearchEngine'),
+        'ENGINE': os.environ.get('HAYSTACK_DEFAULT_ENGINE', 'haystack_es.backends.Elasticsearch5SearchEngine'),
         'URL': os.environ.get('HAYSTACK_DEFAULT_URL', 'http://127.0.0.1:9200/'),
         'INDEX_NAME': os.environ.get('HAYSTACK_DEFAULT_INDEX_NAME', 'dgs'),
         'INCLUDE_SPELLING': bool(os.environ.get('HAYSTACK_DEFAULT_INCLUDE_SPELLING', True)),

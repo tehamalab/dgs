@@ -2,7 +2,7 @@ from django.apps import apps
 from haystack.inputs import Raw
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from drf_haystack.viewsets import HaystackViewSet
-from haystack_elasticsearch5.query import SearchQuerySet
+from haystack_es.query import SearchQuerySet
 from .serializers import SearchResultSerializer
 from .pagination import SearchPagination
 from ..filters import SimpleFilterBackend

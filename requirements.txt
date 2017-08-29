@@ -12,7 +12,7 @@ django-modeltranslation
 # search
 django-haystack
 celery-haystack
-git+ssh://git@github.com/machakux/haystack-elasticsearch5.git
+django-haystack-es
 elasticsearch
 certifi
 
