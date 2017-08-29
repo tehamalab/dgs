@@ -230,6 +230,26 @@ class Sector(MPTTModel):
             or [ancestor.name for ancestor in self.get_ancestors()]
 
     @cached_property
+    def themes_codes(self):
+        return json.loads(self.extras.get('themes_codes', '[]'))
+
+    @cached_property
+    def themes_names(self):
+        return json.loads(self.extras.get('themes_names', '[]'))
+
+    @cached_property
+    def plans_ids(self):
+        return json.loads(self.extras.get('plans_ids', '[]'))
+
+    @cached_property
+    def plans_codes(self):
+        return json.loads(self.extras.get('plans_codes', '[]'))
+
+    @cached_property
+    def plans_names(self):
+        return json.loads(self.extras.get('plans_names', '[]'))
+
+    @cached_property
     def api_url(self):
         try:
             return reverse('sector-detail', args=[self.pk])
@@ -1039,6 +1059,18 @@ class Progress(models.Model):
         return self.extras.get('value_unit', '')
 
 
+@receiver(m2m_changed, sender=Sector.themes.through)
+def sector_themes_changed(sender, instance, action, **kwargs):
+    if action == 'post_add':
+        themes = instance.themes.prefetch_related('plan')
+        instance.extras['themes_codes'] = json.dumps([t.code for t in themes])
+        instance.extras['themes_names'] = json.dumps([t.name for t in themes])
+        instance.extras['plans_ids'] = json.dumps(list(set([t.plan.id for t in themes])))
+        instance.extras['plans_codes'] = json.dumps(list(set([t.plan.code for t in themes])))
+        instance.extras['plans_names'] = json.dumps(list(set([t.plan.name for t in themes])))
+        Sector.objects.filter(id=instance.id).update(extras=instance.extras)
+
+
 @receiver(m2m_changed, sender=Component.indicators.through)
 def component_indicators_changed(sender, instance, action, **kwargs):
     if action == 'post_add':
@@ -1046,15 +1078,15 @@ def component_indicators_changed(sender, instance, action, **kwargs):
             .prefetch_related('target', 'target__goal', 'target__goal__plan')
         instance.extras['indicators_codes'] = json.dumps([i.code for i in indctrs])
         instance.extras['indicators_names'] = json.dumps([i.name for i in indctrs])
-        instance.extras['targets_ids'] = json.dumps([i.target.id for i in indctrs])
-        instance.extras['targets_codes'] = json.dumps([i.target.code for i in indctrs])
-        instance.extras['targets_names'] = json.dumps([i.target.name for i in indctrs])
-        instance.extras['goals_ids'] = json.dumps([i.target.goal.id for i in indctrs])
-        instance.extras['goals_codes'] = json.dumps([i.target.goal.code for i in indctrs])
-        instance.extras['goals_names'] = json.dumps([i.target.goal.name for i in indctrs])
-        instance.extras['plans_ids'] = json.dumps([i.target.goal.plan.id for i in indctrs])
-        instance.extras['plans_codes'] = json.dumps([i.target.goal.plan.code for i in indctrs])
-        instance.extras['plans_names'] = json.dumps([i.target.goal.plan.name for i in indctrs])
+        instance.extras['targets_ids'] = json.dumps(list(set([i.target.id for i in indctrs])))
+        instance.extras['targets_codes'] = json.dumps(list(set([i.target.code for i in indctrs])))
+        instance.extras['targets_names'] = json.dumps(list(set([i.target.name for i in indctrs])))
+        instance.extras['goals_ids'] = json.dumps(list(set([i.target.goal.id for i in indctrs])))
+        instance.extras['goals_codes'] = json.dumps(list(set([i.target.goal.code for i in indctrs])))
+        instance.extras['goals_names'] = json.dumps(list(set([i.target.goal.name for i in indctrs])))
+        instance.extras['plans_ids'] = json.dumps(list(set([i.target.goal.plan.id for i in indctrs])))
+        instance.extras['plans_codes'] = json.dumps(list(set([i.target.goal.plan.code for i in indctrs])))
+        instance.extras['plans_names'] = json.dumps(list(set([i.target.goal.plan.name for i in indctrs])))
         Component.objects.filter(id=instance.id).update(extras=instance.extras)
 
 

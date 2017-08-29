@@ -44,9 +44,23 @@ class SectorIndex(BaseIndex, indexes.Indexable):
     parent_name = indexes.CharField(model_attr='parent__name', null=True,
                                     faceted=True)
     level = indexes.IntegerField(model_attr='level', null=True, faceted=True)
+    themes_ids = indexes.MultiValueField(faceted=True, null=True)
+    themes_codes = indexes.MultiValueField(
+        model_attr='themes_codes', faceted=True, null=True)
+    themes_names = indexes.MultiValueField(
+        model_attr='themes_names', faceted=True, null=True)
+    plans_ids = indexes.MultiValueField(
+        model_attr='plans_ids', faceted=True, null=True)
+    plans_codes = indexes.MultiValueField(
+        model_attr='plans_codes', faceted=True, null=True)
+    plans_names = indexes.MultiValueField(
+        model_attr='plans_names', faceted=True, null=True)
 
     def get_model(self):
         return Sector
+
+    def prepare_indicators(self, obj):
+        return list(obj.themes.values_list('id', flat=True))
 
 
 class PlanIndex(BaseIndex, indexes.Indexable):
