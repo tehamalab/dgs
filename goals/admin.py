@@ -59,17 +59,18 @@ class ThemeAdmin(ImportExportModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
-class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
-    resource_class = SectorResource
-    search_fields = ['^code', 'name', 'description']
-
-
 class SectorTypeAdmin(ImportExportModelAdmin):
     resource_class = SectorTypeResource
     ordering = ['id']
     search_fields = ['^code', 'name']
     list_display = ['code', 'name', 'description']
     list_display_links = ['code', 'name']
+
+
+class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
+    resource_class = SectorResource
+    search_fields = ['^code', 'name', 'description']
+    filter_horizontal = ['themes']
 
 
 class TargetAdmin(ImportExportModelAdmin):
