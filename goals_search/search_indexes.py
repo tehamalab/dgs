@@ -38,29 +38,6 @@ class BaseIndex(indexes.CelerySearchIndex):
         return self.get_model().__name__.lower()
 
 
-class PlanIndex(BaseIndex, indexes.Indexable):
-    caption = indexes.CharField(model_attr='caption', null=True)
-
-    def get_model(self):
-        return Plan
-
-
-class ThemeIndex(BaseIndex, indexes.Indexable):
-    caption = indexes.CharField(model_attr='caption', null=True)
-    plans = indexes.MultiValueField(
-        model_attr='plans_ids', faceted=True, null=True)
-    plans_codes = indexes.MultiValueField(
-        model_attr='plans_codes', faceted=True, null=True)
-    plans_names = indexes.MultiValueField(
-        model_attr='plans_names', faceted=True, null=True)
-
-    def get_model(self):
-        return Theme
-
-    def prepare_plans(self, obj):
-        return list(obj.plans.values_list('id', flat=True))
-
-
 class SectorIndex(BaseIndex, indexes.Indexable):
     parent = indexes.IntegerField(model_attr='parent_id', null=True,
                                   faceted=True)
@@ -72,7 +49,14 @@ class SectorIndex(BaseIndex, indexes.Indexable):
         return Sector
 
 
-class GoalIndex(BaseIndex, indexes.Indexable):
+class PlanIndex(BaseIndex, indexes.Indexable):
+    caption = indexes.CharField(model_attr='caption', null=True)
+
+    def get_model(self):
+        return Plan
+
+
+class ThemeIndex(BaseIndex, indexes.Indexable):
     caption = indexes.CharField(model_attr='caption', null=True)
     plan = indexes.IntegerField(model_attr='plan_id',
                                 null=True, faceted=True)
@@ -80,6 +64,13 @@ class GoalIndex(BaseIndex, indexes.Indexable):
                                   null=True, faceted=True)
     plan_name = indexes.CharField(model_attr='plan_name',
                                   null=True, faceted=True)
+
+    def get_model(self):
+        return Theme
+
+
+class GoalIndex(ThemeIndex):
+
     def get_model(self):
         return Goal
 

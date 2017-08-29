@@ -37,38 +37,6 @@ class AreaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PlanSerializer(serializers.ModelSerializer):
-    image_small = serializers.ImageField(read_only=True)
-    image_medium = serializers.ImageField(read_only=True)
-    image_large = serializers.ImageField(read_only=True)
-    api_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Plan
-        fields = '__all__'
-
-    def get_api_url(self, obj):
-        return self.context.get('request')\
-            .build_absolute_uri(obj.api_url)
-
-
-class ThemeSerializer(serializers.ModelSerializer):
-    image_small = serializers.ImageField(read_only=True)
-    image_medium = serializers.ImageField(read_only=True)
-    image_large = serializers.ImageField(read_only=True)
-    plans_codes = serializers.ListField(read_only=True)
-    plans_names = serializers.ListField(read_only=True)
-    api_url = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Theme
-        exclude = []
-
-    def get_api_url(self, obj):
-        return self.context.get('request')\
-            .build_absolute_uri(obj.api_url)
-
-
 class SectorTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -88,7 +56,22 @@ class SectorSerializer(serializers.ModelSerializer):
             .build_absolute_uri(obj.api_url)
 
 
-class GoalSerializer(serializers.ModelSerializer):
+class PlanSerializer(serializers.ModelSerializer):
+    image_small = serializers.ImageField(read_only=True)
+    image_medium = serializers.ImageField(read_only=True)
+    image_large = serializers.ImageField(read_only=True)
+    api_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Plan
+        fields = '__all__'
+
+    def get_api_url(self, obj):
+        return self.context.get('request')\
+            .build_absolute_uri(obj.api_url)
+
+
+class ThemeSerializer(serializers.ModelSerializer):
     image_small = serializers.ImageField(read_only=True)
     image_medium = serializers.ImageField(read_only=True)
     image_large = serializers.ImageField(read_only=True)
@@ -98,12 +81,19 @@ class GoalSerializer(serializers.ModelSerializer):
     api_url = serializers.SerializerMethodField()
 
     class Meta:
-        model = Goal
+        model = Theme
         exclude = []
 
     def get_api_url(self, obj):
         return self.context.get('request')\
             .build_absolute_uri(obj.api_url)
+
+
+class GoalSerializer(ThemeSerializer):
+
+    class Meta:
+        model = Goal
+        exclude = []
 
 
 class TargetSerializer(serializers.ModelSerializer):

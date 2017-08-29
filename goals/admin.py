@@ -32,7 +32,7 @@ class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
 
 class PlanAdmin(ImportExportModelAdmin):
     search_fields = ['^code', 'name']
-    list_display = ['code', 'name']
+    list_display = ['code', 'name', 'caption']
     list_display_links = ['code', 'name']
     prepopulated_fields = {"slug": ("name",)}
 
@@ -40,9 +40,9 @@ class PlanAdmin(ImportExportModelAdmin):
 class GoalAdmin(ImportExportModelAdmin):
     resource_class = GoalResource
     ordering = ['id']
-    search_fields = ['^code', 'name', 'description', 'plan__code',
+    search_fields = ['^code', 'name', 'caption', 'plan__code',
                      'plan__name']
-    list_display = ['plan_code', 'code', 'name', 'description']
+    list_display = ['plan_code', 'code', 'name', 'caption']
     list_display_links = ['code', 'name']
     list_filter = ['plan']
     prepopulated_fields = {"slug": ("name",)}
@@ -51,12 +51,11 @@ class GoalAdmin(ImportExportModelAdmin):
 class ThemeAdmin(ImportExportModelAdmin):
     resource_class = ThemeResource
     ordering = ['id']
-    search_fields = ['^code', 'name', 'description', 'plans__code',
-                     'plans__name']
-    list_display = ['plans_codes_str', 'code', 'name', 'description']
+    search_fields = ['^code', 'name', 'caption', 'plan__code',
+                     'plan__name']
+    list_display = ['plan_code', 'code', 'name', 'caption']
     list_display_links = ['code', 'name']
-    list_filter = ['plans']
-    filter_horizontal = ['plans']
+    list_filter = ['plan']
     prepopulated_fields = {"slug": ("name",)}
 
 

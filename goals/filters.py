@@ -27,6 +27,15 @@ class AreaFilter(django_filters.FilterSet):
         fields = ['code', 'level']
 
 
+class SectorFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(lookup_expr='iexact')
+    description = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = Sector
+        fields = ['parent', 'themes']
+
+
 class PlanFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='iexact')
 
@@ -35,33 +44,21 @@ class PlanFilter(django_filters.FilterSet):
         fields = ['code']
 
 
-class GoalFilter(django_filters.FilterSet):
+class ThemeFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(lookup_expr='iexact')
     description = django_filters.CharFilter(lookup_expr='icontains')
     plan_code = django_filters.CharFilter(name='plan__code')
 
     class Meta:
-        model = Goal
+        model = Theme
         fields = ['plan', 'code']
 
 
-class ThemeFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(lookup_expr='iexact')
-    description = django_filters.CharFilter(lookup_expr='icontains')
-    plan_code = django_filters.CharFilter(name='plans__code')
+class GoalFilter(ThemeFilter):
 
     class Meta:
-        model = Theme
-        fields = ['plans', 'code']
-
-
-class SectorFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(lookup_expr='iexact')
-    description = django_filters.CharFilter(lookup_expr='icontains')
-
-    class Meta:
-        model = Sector
-        fields = ['parent', 'themes']
+        model = Goal
+        fields = ['plan', 'code']
 
 
 class TargetFilter(django_filters.FilterSet):

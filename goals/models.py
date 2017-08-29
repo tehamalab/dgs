@@ -109,173 +109,6 @@ class Area(MPTTModel):
         return ""
 
 
-class Plan(models.Model):
-    code = models.CharField(_('code'), max_length=10,
-                            unique=True)
-    name = models.CharField(_('Name'), max_length=255)
-    caption = models.CharField(_('Caption'), max_length=255, blank=True)
-    description = models.TextField(_('Description'), blank=True)
-    image = models.ImageField(_('Image'),
-                              upload_to='goals/goals/images',
-                              blank=True, null=True)
-    image_small = ImageSpecField(source='image',
-                                 processors=[ResizeToFit(100, 100)],
-                                 format='PNG',
-                                 options={'quality': 90})
-    image_medium = ImageSpecField(source='image',
-                                  processors=[ResizeToFit(250, 250)],
-                                  format='PNG',
-                                  options={'quality': 90})
-    image_large = ImageSpecField(source='image',
-                                 processors=[ResizeToFit(700)],
-                                 options={'quality': 80})
-    slug = models.SlugField(_('Slug'), blank=True)
-    created = models.DateTimeField(_('Created'), auto_now_add=True)
-    last_modified = models.DateTimeField(_('Last modified'),
-                                         auto_now=True)
-    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
-
-    class Meta:
-        verbose_name = _('Plan')
-        verbose_name_plural = _('Plans')
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = self.get_slug()
-        super(Plan, self).save(*args, **kwargs)
-
-    def get_slug(self):
-        if not self.slug:
-            slug = slugify(self.name[:50])
-            return slug
-        return self.slug
-
-    @cached_property
-    def api_url(self):
-        try:
-            return reverse('plan-detail', args=[self.pk])
-        except:
-            # API isn't installed
-            # FIXME: Catch a specific exception
-            return ''
-
-    @cached_property
-    def image_url(self):
-        if self.image:
-            return self.image.url
-
-    @cached_property
-    def image_small_url(self):
-        if self.image_small:
-            return self.image_small.url
-
-    @cached_property
-    def image_medium_url(self):
-        if self.image_medium:
-            return self.image_medium.url
-
-    @cached_property
-    def image_large_url(self):
-        if self.image_large:
-            return self.image_large.url
-
-
-class Theme(models.Model):
-    plans = models.ManyToManyField('goals.Plan', verbose_name='Plans',
-                                   related_name='themes')
-    name = models.CharField(_('Theme name'), max_length=255)
-    code = models.CharField(_('Theme number'), max_length=10)
-    caption = models.CharField(_('Caption'), max_length=255, blank=True)
-    description = models.TextField(_('Theme description'), blank=True)
-    image = models.ImageField(_('Image'),
-                              upload_to='goals/themes/images',
-                              blank=True, null=True)
-    image_small = ImageSpecField(source='image',
-                                 processors=[ResizeToFit(100, 100)],
-                                 format='PNG',
-                                 options={'quality': 90})
-    image_medium = ImageSpecField(source='image',
-                                  processors=[ResizeToFit(250, 250)],
-                                  format='PNG',
-                                  options={'quality': 90})
-    image_large = ImageSpecField(source='image',
-                                 processors=[ResizeToFit(700)],
-                                 options={'quality': 80})
-    slug = models.SlugField(_('Slug'), blank=True)
-    created = models.DateTimeField(_('Created'), auto_now_add=True)
-    last_modified = models.DateTimeField(_('Last modified'),
-                                         auto_now=True)
-    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
-
-    class Meta:
-        verbose_name = _('Theme')
-        verbose_name_plural = _('Themes')
-
-    def __str__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = self.get_slug()
-        super(Theme, self).save(*args, **kwargs)
-
-    @cached_property
-    def plans_ids(self):
-        return json.loads(self.extras.get('plans_ids', '[]'))
-
-    @cached_property
-    def plans_codes(self):
-        return json.loads(self.extras.get('plans_codes', '[]'))
-
-    @cached_property
-    def plans_codes_str(self):
-        return ', '.join(json.loads(self.extras.get('plans_codes', '[]')))
-
-    @cached_property
-    def plans_names(self):
-        return json.loads(self.extras.get('plans_names', '[]'))
-
-    @cached_property
-    def image_url(self):
-        if self.image:
-            return self.image.url
-
-    @cached_property
-    def image_small_url(self):
-        if self.image_small:
-            return self.image_small.url
-
-    @cached_property
-    def image_medium_url(self):
-        if self.image_medium:
-            return self.image_medium.url
-
-    @cached_property
-    def image_large_url(self):
-        if self.image_large:
-            return self.image_large.url
-
-    @cached_property
-    def plan_name(self):
-        return self.extras.get('plan_name', '') or self.plan.name
-
-    @cached_property
-    def plan_code(self):
-        return self.extras.get('plan_code', '') or self.plan.code
-
-    @cached_property
-    def api_url(self):
-        try:
-            return reverse('theme-detail', args=[self.pk])
-        except:
-            # API isn't installed
-            # FIXME: Catch a specific exception
-            return ''
-
-
 class SectorType(models.Model):
     code = models.CharField(_('Code'), max_length=20, unique=True)
     name = models.CharField(_('Name'), max_length=255)
@@ -291,7 +124,6 @@ class SectorType(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class Sector(MPTTModel):
@@ -401,6 +233,167 @@ class Sector(MPTTModel):
     def api_url(self):
         try:
             return reverse('sector-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
+
+
+class Plan(models.Model):
+    code = models.CharField(_('code'), max_length=10,
+                            unique=True)
+    name = models.CharField(_('Name'), max_length=255)
+    caption = models.CharField(_('Caption'), max_length=255, blank=True)
+    description = models.TextField(_('Description'), blank=True)
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/goals/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Plan')
+        verbose_name_plural = _('Plans')
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.get_slug()
+        super(Plan, self).save(*args, **kwargs)
+
+    def get_slug(self):
+        if not self.slug:
+            slug = slugify(self.name[:50])
+            return slug
+        return self.slug
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('plan-detail', args=[self.pk])
+        except:
+            # API isn't installed
+            # FIXME: Catch a specific exception
+            return ''
+
+    @cached_property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+
+    @cached_property
+    def image_small_url(self):
+        if self.image_small:
+            return self.image_small.url
+
+    @cached_property
+    def image_medium_url(self):
+        if self.image_medium:
+            return self.image_medium.url
+
+    @cached_property
+    def image_large_url(self):
+        if self.image_large:
+            return self.image_large.url
+
+
+class Theme(models.Model):
+    plan = models.ForeignKey('goals.Plan', verbose_name='Plans',
+                             related_name='themes')
+    name = models.CharField(_('Theme name'), max_length=255)
+    code = models.CharField(_('Theme number'), max_length=10)
+    caption = models.CharField(_('Caption'), max_length=255, blank=True)
+    description = models.TextField(_('Theme description'), blank=True)
+    image = models.ImageField(_('Image'),
+                              upload_to='goals/themes/images',
+                              blank=True, null=True)
+    image_small = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(100, 100)],
+                                 format='PNG',
+                                 options={'quality': 90})
+    image_medium = ImageSpecField(source='image',
+                                  processors=[ResizeToFit(250, 250)],
+                                  format='PNG',
+                                  options={'quality': 90})
+    image_large = ImageSpecField(source='image',
+                                 processors=[ResizeToFit(700)],
+                                 options={'quality': 80})
+    slug = models.SlugField(_('Slug'), blank=True)
+    created = models.DateTimeField(_('Created'), auto_now_add=True)
+    last_modified = models.DateTimeField(_('Last modified'),
+                                         auto_now=True)
+    extras = HStoreField(_('Extras'), blank=True, null=True, default={})
+
+    class Meta:
+        verbose_name = _('Theme')
+        verbose_name_plural = _('Themes')
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.extras['plan_name'] = self.plan.name
+        self.extras['plan_code'] = self.plan.code
+        if not self.slug:
+            self.slug = self.get_slug()
+        super(Theme, self).save(*args, **kwargs)
+
+    @cached_property
+    def plan_code(self):
+        return json.loads(self.extras.get('plan_code', ''))
+
+    @cached_property
+    def plan_name(self):
+        return json.loads(self.extras.get('plan_name', ''))
+
+    @cached_property
+    def image_url(self):
+        if self.image:
+            return self.image.url
+
+    @cached_property
+    def image_small_url(self):
+        if self.image_small:
+            return self.image_small.url
+
+    @cached_property
+    def image_medium_url(self):
+        if self.image_medium:
+            return self.image_medium.url
+
+    @cached_property
+    def image_large_url(self):
+        if self.image_large:
+            return self.image_large.url
+
+    @cached_property
+    def plan_name(self):
+        return self.extras.get('plan_name', '') or self.plan.name
+
+    @cached_property
+    def plan_code(self):
+        return self.extras.get('plan_code', '') or self.plan.code
+
+    @cached_property
+    def api_url(self):
+        try:
+            return reverse('theme-detail', args=[self.pk])
         except:
             # API isn't installed
             # FIXME: Catch a specific exception
@@ -1037,16 +1030,6 @@ class Progress(models.Model):
     @cached_property
     def value_unit(self):
         return self.extras.get('value_unit', '')
-
-
-@receiver(m2m_changed, sender=Theme.plans.through)
-def theme_plans_changed(sender, instance, action, **kwargs):
-    if action == 'post_add':
-        plans = instance.plans.all()
-        instance.extras['plans_ids'] = json.dumps([i.id for i in plans])
-        instance.extras['plans_names'] = json.dumps([i.name for i in plans])
-        instance.extras['plans_codes'] = json.dumps([i.code for i in plans])
-        Theme.objects.filter(id=instance.id).update(extras=instance.extras)
 
 
 @receiver(m2m_changed, sender=Component.indicators.through)

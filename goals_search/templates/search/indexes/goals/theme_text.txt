@@ -2,6 +2,4 @@
 {{ object.code }}
 {{ object.description }}
 
-{% for plan in object.plans.all %}
-    {{ plan }}
-{% endfor %}
+{{ object.plan.name }}
