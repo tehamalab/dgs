@@ -655,7 +655,7 @@ class Indicator(models.Model):
 
     def __str__(self):
         return '%s %s : %s' \
-            %(self.plan_code, self.code, truncatechars(self.description, 50))
+            %(self.plan_code, self.code, self.name)
 
     def save(self, *args, **kwargs):
         self.clean()
