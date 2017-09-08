@@ -26,6 +26,7 @@ class AreaTypeAdmin(ImportExportModelAdmin):
 class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     resource_class = AreaResource
     search_fields = ['code', 'name']
+    save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ['type']
 
@@ -34,6 +35,7 @@ class PlanAdmin(ImportExportModelAdmin):
     search_fields = ['^code', 'name']
     list_display = ['code', 'name', 'caption']
     list_display_links = ['code', 'name']
+    save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
 
 
@@ -45,6 +47,7 @@ class GoalAdmin(ImportExportModelAdmin):
     list_display = ['plan_code', 'code', 'name', 'caption']
     list_display_links = ['code', 'name']
     list_filter = ['plan']
+    save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
 
 
@@ -56,6 +59,7 @@ class ThemeAdmin(ImportExportModelAdmin):
     list_display = ['plan_code', 'code', 'name', 'caption']
     list_display_links = ['code', 'name']
     list_filter = ['plan']
+    save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
 
 
@@ -65,11 +69,13 @@ class SectorTypeAdmin(ImportExportModelAdmin):
     search_fields = ['^code', 'name']
     list_display = ['code', 'name', 'description']
     list_display_links = ['code', 'name']
+    save_on_top = True
 
 
 class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     resource_class = SectorResource
     search_fields = ['^code', 'name', 'description']
+    save_on_top = True
     filter_horizontal = ['themes']
 
 
@@ -80,6 +86,7 @@ class TargetAdmin(ImportExportModelAdmin):
     list_display = ['plan_code', 'code', 'name']
     list_display_links = ['code', 'name']
     list_filter = ['goal__plan', 'goal']
+    save_on_top = True
 
 
 class IndicatorAdmin(ImportExportModelAdmin):
@@ -89,6 +96,7 @@ class IndicatorAdmin(ImportExportModelAdmin):
     list_display = ['plan_code', 'code', 'name']
     list_display_links = ['code', 'name']
     list_filter = ['target__goal__plan', 'target__goal', 'theme', 'sector']
+    save_on_top = True
     raw_id_fields = ['target']
     inlines = [ComponentInline]
 
@@ -102,6 +110,7 @@ class ComponentAdmin(ImportExportModelAdmin):
                    'indicators__target__goal', 'stats_available', 'agency',
                    'data_source']
     prepopulated_fields = {"slug": ("name",)}
+    save_on_top = True
     filter_horizontal = ['indicators']
     inlines = [ProgressInline]
 
@@ -121,6 +130,7 @@ class ProgressAdmin(ImportExportModelAdmin):
         'component__indicators__target__goal'
     ]
     list_select_related = ['component']
+    save_on_top = True
     raw_id_fields = ['component']
 
 
