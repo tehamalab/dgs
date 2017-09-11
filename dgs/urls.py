@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 from rest_framework import routers
 from goals.api import views as goals_views
 from goals_search.api import views as search_views
@@ -43,6 +44,7 @@ router.register(r'search', search_views.SearchViewSet, 'search')
 
 
 urlpatterns = [
+    url(r'^$', TemplateView.as_view(template_name="home.html"), name="home"),
     url(r'^management/', admin.site.urls),
     url(r'^api/', include(router.urls)),
 ]

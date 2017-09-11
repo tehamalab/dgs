@@ -258,6 +258,8 @@ SITE_API_NAME = os.environ.get('SITE_API_NAME', 'DGs API')
 
 SITE_API_URL = os.environ.get('SITE_API_URL', '/api/')
 
+PUBLIC_SITE_URL = os.environ.get('PUBLIC_SITE_URL', '/')
+
 ADMIN_SITE_TITLE = os.environ.get('ADMIN_SITE_TITLE', 'DGs Management')
 
 ADMIN_SITE_HEADER = os.environ.get('ADMIN_SITE_HEADER', 'Development Goals (DGs)')
