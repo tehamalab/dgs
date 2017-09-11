@@ -20,8 +20,15 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from rest_framework import routers
 from goals.api import views as goals_views
-from goals_search.api import views as search_views
 from .views import APIRootView
+
+
+goals_search_installed = False
+try:
+    from goals_search.api import views as search_views
+    goals_search_installed = 'goals_search' in settings.INSTALLED_APPS
+except:
+    pass
 
 
 class DefaultRouter(routers.DefaultRouter):
@@ -40,7 +47,9 @@ router.register(r'targets', goals_views.TargetViewSet)
 router.register(r'indicators', goals_views.IndicatorViewSet, 'indicators')
 router.register(r'components', goals_views.ComponentViewSet)
 router.register(r'progress', goals_views.ProgressViewSet)
-router.register(r'search', search_views.SearchViewSet, 'search')
+
+if goals_search_installed:
+    router.register(r'search', search_views.SearchViewSet, 'search')
 
 
 urlpatterns = [
