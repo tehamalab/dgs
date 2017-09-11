@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+
+{% block body %}
+    <div class="container">
+        <header>
+            <img class="img-logo" src="{% static 'images/logo.png' %}">
+        </header>
+    </div>
+
+    <div class="container">
+        <div class="jumbotron">
+            <div class="row text-center">
+
+                <div class="col-sm-4">
+                    <a href="{{ PUBLIC_SITE_URL }}">
+                        <h1><i class="text-muted fa fa-globe"></i></h1>
+                        <h3 class="text-muted">{% trans 'For everyone' %}</h3>
+                        <span class="btn btn-info"><strong>{% trans 'Public site' %}</strong></span>
+                    </a>
+                </div>
+
+                <div class="col-sm-4">
+                    <a href="{% url 'admin:index' %}">
+                        <h1><i class="text-muted fa fa-lock"></i></h1>
+                        <h3 class="text-muted">{% trans 'For staff' %}</h3>
+                        <span class="btn btn-warning"><strong>{% trans 'Management' %}</strong></span>
+                    </a>
+                </div>
+
+                <div class="col-sm-4">
+                    <a href="{% url 'api-root' %}">
+                        <h1><i class="text-muted fa fa-code"></i></h1>
+                        <h3 class="text-muted">{% trans 'For software developers' %}</h3>
+                        <span class="btn btn-success"><strong>{% trans 'API' %}</strong></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
