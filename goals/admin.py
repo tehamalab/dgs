@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.contrib.postgres.fields import HStoreField
 from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
+from django_postgres_utils.widgets import AdminHStoreWidget
 from .models import (Plan, Goal, Theme, SectorType, Sector, Target, Indicator,
                      Component, Progress, Area, AreaType)
 from .import_export import (AreaResource, GoalResource, ThemeResource,
@@ -21,6 +23,9 @@ class ComponentInline(admin.TabularInline):
 
 class AreaTypeAdmin(ImportExportModelAdmin):
     search_fields = ['code', 'name']
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
@@ -29,6 +34,9 @@ class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ['type']
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class PlanAdmin(ImportExportModelAdmin):
@@ -37,6 +45,9 @@ class PlanAdmin(ImportExportModelAdmin):
     list_display_links = ['code', 'name']
     save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class GoalAdmin(ImportExportModelAdmin):
@@ -49,6 +60,9 @@ class GoalAdmin(ImportExportModelAdmin):
     list_filter = ['plan']
     save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class ThemeAdmin(ImportExportModelAdmin):
@@ -61,6 +75,9 @@ class ThemeAdmin(ImportExportModelAdmin):
     list_filter = ['plan']
     save_on_top = True
     prepopulated_fields = {"slug": ("name",)}
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class SectorTypeAdmin(ImportExportModelAdmin):
@@ -70,6 +87,9 @@ class SectorTypeAdmin(ImportExportModelAdmin):
     list_display = ['code', 'name', 'description']
     list_display_links = ['code', 'name']
     save_on_top = True
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
@@ -77,6 +97,9 @@ class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     search_fields = ['^code', 'name', 'description']
     save_on_top = True
     filter_horizontal = ['themes']
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class TargetAdmin(ImportExportModelAdmin):
@@ -87,6 +110,9 @@ class TargetAdmin(ImportExportModelAdmin):
     list_display_links = ['code', 'name']
     list_filter = ['goal__plan', 'goal']
     save_on_top = True
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class IndicatorAdmin(ImportExportModelAdmin):
@@ -99,6 +125,9 @@ class IndicatorAdmin(ImportExportModelAdmin):
     save_on_top = True
     raw_id_fields = ['target']
     inlines = [ComponentInline]
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class ComponentAdmin(ImportExportModelAdmin):
@@ -113,6 +142,9 @@ class ComponentAdmin(ImportExportModelAdmin):
     save_on_top = True
     filter_horizontal = ['indicators']
     inlines = [ProgressInline]
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 class ProgressAdmin(ImportExportModelAdmin):
@@ -132,6 +164,9 @@ class ProgressAdmin(ImportExportModelAdmin):
     list_select_related = ['component']
     save_on_top = True
     raw_id_fields = ['component']
+    formfield_overrides = {
+        HStoreField: {'widget': AdminHStoreWidget}
+    }
 
 
 admin.site.register(AreaType, AreaTypeAdmin)

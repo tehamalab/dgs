@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'imagekit',
+    'django_postgres_utils',
     'goals',
     'goals_search',
     'debug_toolbar',

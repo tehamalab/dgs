@@ -27,6 +27,7 @@ django-import-export
 
 # admin
 django-modeladmin-reorder
+django-postgres-utils
 
 # media
 Pillow
