@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 from django.contrib.postgres.fields import HStoreField
 from mptt.admin import DraggableMPTTAdmin
 from import_export.admin import ImportExportModelAdmin
@@ -8,6 +9,26 @@ from .models import (Plan, Goal, Theme, SectorType, Sector, Target, Indicator,
 from .import_export import (AreaResource, GoalResource, ThemeResource,
                             SectorTypeResource, SectorResource, TargetResource,
                             IndicatorResource)
+
+
+class HiddenExtrasMixin:
+
+    def get_fieldsets(self, request, obj=None):
+        print('called')
+        if self.fieldsets:
+            return self.fieldsets
+        fields = self.get_fields(request, obj)
+        fields.remove('extras')
+        return [
+            (None, {
+                'fields': fields
+            }),
+            (_('Additional Info'), {
+                'fields': ('extras',),
+                'classes': ('collapse',)
+
+            })
+        ]
 
 
 class ProgressInline(admin.TabularInline):
@@ -21,14 +42,14 @@ class ComponentInline(admin.TabularInline):
     raw_id_fields = ['component']
 
 
-class AreaTypeAdmin(ImportExportModelAdmin):
+class AreaTypeAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     search_fields = ['code', 'name']
     formfield_overrides = {
         HStoreField: {'widget': AdminHStoreWidget}
     }
 
 
-class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
+class AreaAdmin(HiddenExtrasMixin, DraggableMPTTAdmin, ImportExportModelAdmin):
     resource_class = AreaResource
     search_fields = ['code', 'name']
     save_on_top = True
@@ -39,7 +60,7 @@ class AreaAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     }
 
 
-class PlanAdmin(ImportExportModelAdmin):
+class PlanAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     search_fields = ['^code', 'name']
     list_display = ['code', 'name', 'caption']
     list_display_links = ['code', 'name']
@@ -50,7 +71,7 @@ class PlanAdmin(ImportExportModelAdmin):
     }
 
 
-class GoalAdmin(ImportExportModelAdmin):
+class GoalAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     resource_class = GoalResource
     ordering = ['id']
     search_fields = ['^code', 'name', 'caption', 'plan__code',
@@ -65,7 +86,7 @@ class GoalAdmin(ImportExportModelAdmin):
     }
 
 
-class ThemeAdmin(ImportExportModelAdmin):
+class ThemeAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     resource_class = ThemeResource
     ordering = ['id']
     search_fields = ['^code', 'name', 'caption', 'plan__code',
@@ -80,7 +101,7 @@ class ThemeAdmin(ImportExportModelAdmin):
     }
 
 
-class SectorTypeAdmin(ImportExportModelAdmin):
+class SectorTypeAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     resource_class = SectorTypeResource
     ordering = ['id']
     search_fields = ['^code', 'name']
@@ -92,7 +113,7 @@ class SectorTypeAdmin(ImportExportModelAdmin):
     }
 
 
-class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
+class SectorAdmin(HiddenExtrasMixin, DraggableMPTTAdmin, ImportExportModelAdmin):
     resource_class = SectorResource
     search_fields = ['^code', 'name', 'description']
     save_on_top = True
@@ -102,7 +123,7 @@ class SectorAdmin(DraggableMPTTAdmin, ImportExportModelAdmin):
     }
 
 
-class TargetAdmin(ImportExportModelAdmin):
+class TargetAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     resource_class = TargetResource
     ordering = ['id']
     search_fields = ['^code', 'name', 'description']
@@ -115,7 +136,7 @@ class TargetAdmin(ImportExportModelAdmin):
     }
 
 
-class IndicatorAdmin(ImportExportModelAdmin):
+class IndicatorAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     resource_class = IndicatorResource
     ordering = ['id']
     search_fields = ['^code', 'name', 'description', '=target__code']
@@ -130,7 +151,7 @@ class IndicatorAdmin(ImportExportModelAdmin):
     }
 
 
-class ComponentAdmin(ImportExportModelAdmin):
+class ComponentAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     ordering = ['id']
     search_fields = ['^code', 'name', 'description', '^indicators__code']
     list_display = ['code', 'name']
@@ -147,7 +168,7 @@ class ComponentAdmin(ImportExportModelAdmin):
     }
 
 
-class ProgressAdmin(ImportExportModelAdmin):
+class ProgressAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     ordering = ['id']
     search_fields = ['component__name', '^component__code',
                  '^component__indicators__code',
