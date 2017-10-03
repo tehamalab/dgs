@@ -102,9 +102,11 @@ class ProgressFilter(django_filters.FilterSet):
         name='component__indicators__target',
         queryset=Target.objects.all())
     area_code = django_filters.CharFilter(name='area__code')
+    area_name = django_filters.CharFilter(name='area__name')
     area_type = django_filters.ModelChoiceFilter(
         name='area__type', queryset=AreaType.objects.all())
     area_type_code = django_filters.CharFilter(name='area__type__code')
+    area_type_name = django_filters.CharFilter(name='area__type__name')
 
     class Meta:
         model = Progress
