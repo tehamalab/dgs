@@ -104,7 +104,7 @@ class TargetIndex(BaseIndex, indexes.Indexable):
                                   null=True, faceted=True)
     plan_id = indexes.IntegerField(model_attr='plan_id',
                                    null=True, faceted=True)
-    
+
     def get_model(self):
         return Target
 
@@ -147,7 +147,7 @@ class IndicatorIndex(TargetIndex, indexes.Indexable):
     plan_id = indexes.IntegerField(model_attr='plan_id',
                                    null=True, faceted=True)
     progress_count = indexes.IntegerField(null=True)
-    
+
     def get_model(self):
         return Indicator
 
@@ -190,7 +190,7 @@ class ComponentIndex(BaseIndex, indexes.Indexable):
     stats_available = indexes.BooleanField(model_attr='stats_available',
                                            null=True, faceted=True)
     progress_count = indexes.IntegerField(null=True)
-    
+
     def get_model(self):
         return Component
 

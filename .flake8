@@ -1,0 +1,5 @@
+[flake8]
+exclude =
+    goals/migrations,
+max-line-length=119
+

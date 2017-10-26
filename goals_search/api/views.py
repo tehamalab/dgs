@@ -1,6 +1,7 @@
 from django.apps import apps
 from haystack.inputs import Raw
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 from drf_haystack.viewsets import HaystackViewSet
 from haystack_es.query import SearchQuerySet
 from .serializers import SearchResultSerializer
@@ -38,8 +39,8 @@ class SearchViewSet(HaystackViewSet):
         'agency', 'data_source', 'stats_available',
         'object_type', 'content', 'parent', 'parent_name', 'level',
         'created', 'last_modified',
-        'progress_count__gt','progress_count__lt',
-        'progress_count__gte','progress_count__lte']
+        'progress_count__gt', 'progress_count__lt',
+        'progress_count__gte', 'progress_count__lte']
     boost_fields = {
         'code': 1.5,
         'name': 3,
@@ -62,7 +63,7 @@ class SearchViewSet(HaystackViewSet):
         'data_source': 1,
         'agency': 1,
     }
-  
+
     def get_queryset(self, index_models=[]):
         q = self.request.query_params.get('q', None)
         if q:

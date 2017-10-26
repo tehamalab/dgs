@@ -19,11 +19,9 @@ class ModelViewSet(viewsets.ModelViewSet):
     def finalize_response(self, request, response, *args, **kwargs):
         response = super(ModelViewSet, self).finalize_response(
             request, response, *args, **kwargs)
-        filename = '%s-%s.csv' \
-            %(slugify(self.get_view_name()), timezone.now().isoformat())
+        filename = '%s-%s.csv' % (slugify(self.get_view_name()), timezone.now().isoformat())
         if response.accepted_renderer.format == 'csv':
-            response['content-disposition'] = 'attachment; filename=%s'\
-                %filename
+            response['content-disposition'] = 'attachment; filename=%s' % filename
         return response
 
 
@@ -92,15 +90,12 @@ class IndicatorViewSet(ModelViewSet):
     ordering = ('code',)
 
     def get_queryset(self):
+        progq = Progress.objects\
+            .order_by('component__indicators', '-year', 'area__level')\
+            .distinct('component__indicators')
         return Indicator.objects\
             .annotate(progress_count=Count('components__progress'))\
-            .prefetch_related(
-                Prefetch('components__progress', to_attr='progress_preview',
-                        queryset=Progress.objects\
-                            .order_by('component__indicators', '-year',
-                                      'area__level')\
-                            .distinct('component__indicators')
-                    ))
+            .prefetch_related(Prefetch('components__progress', to_attr='progress_preview', queryset=progq))
 
 
 class ComponentViewSet(ModelViewSet):

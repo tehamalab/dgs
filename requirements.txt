@@ -43,5 +43,4 @@ drf-haystack
 
 # development
 django-debug-toolbar
-ipython
 

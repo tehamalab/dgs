@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from .utils import str_to_bool
+from kombu import Exchange, Queue
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -130,13 +132,15 @@ if len(haystack_default_http_auth) >= 2:
 haystack_default_use_ssl = bool(os.environ.get('HAYSTACK_DEFAULT_USE_SSL', False))
 if haystack_default_use_ssl:
     HAYSTACK_CONNECTIONS['default']['KWARGS']['use_ssl'] = haystack_default_use_ssl
-    HAYSTACK_CONNECTIONS['default']['KWARGS']['verify_certs'] = bool(os.environ.get('HAYSTACK_DEFAULT_VERIFY_CERTS', True))
+    HAYSTACK_CONNECTIONS['default']['KWARGS']['verify_certs'] = bool(
+        os.environ.get('HAYSTACK_DEFAULT_VERIFY_CERTS', True))
 
 haystack_default_connection_class = os.environ.get('HAYSTACK_DEFAULT_CONNECTION_CLASS', '')
 if haystack_default_connection_class:
     HAYSTACK_CONNECTIONS['default']['KWARGS']['connection_class'] = haystack_default_connection_class
 
-HAYSTACK_SIGNAL_PROCESSOR = os.environ.get('HAYSTACK_SIGNAL_PROCESSOR', 'celery_haystack.signals.CelerySignalProcessor')
+HAYSTACK_SIGNAL_PROCESSOR = os.environ.get('HAYSTACK_SIGNAL_PROCESSOR',
+                                           'celery_haystack.signals.CelerySignalProcessor')
 
 HAYSTACK_DEFAULT_OPERATOR = os.environ.get('HAYSTACK_DEFAULT_OPERATOR', 'AND')
 
@@ -181,15 +185,15 @@ LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE', 'en')
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = LANGUAGE_CODE
 
-gettext = lambda s: s
+gettext = lambda s: s  # noqa
 LANGUAGES = (
     ('en', gettext('English')),
     ('sw', gettext('Kiswahili')),
 )
 
-if os.environ.get('LANGUAGES',''):
+if os.environ.get('LANGUAGES', ''):
     LANGUAGES = []
-    for lang in os.environ.get('LANGUAGES','').split(';'):
+    for lang in os.environ.get('LANGUAGES', '').split(';'):
         LANGUAGES.append([i.strip() for i in lang.split(':')])
 
 LOCALE_PATHS = [
@@ -220,7 +224,6 @@ CELERY_TIMEZONE = os.environ.get('CELERY_TIMEZONE', TIME_ZONE)
 
 CELERY_ENABLE_UTC = True
 
-from kombu import Exchange, Queue
 CELERY_QUEUES = (
     Queue(
         PROJECT_NAME,
@@ -235,7 +238,7 @@ CELERY_HAYSTACK_QUEUE = PROJECT_NAME
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL =  os.environ.get('STATIC_URL', '/static/')
+STATIC_URL = os.environ.get('STATIC_URL', '/static/')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
@@ -247,9 +250,11 @@ MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media_root'))
 
 # Imagekit
 
-IMAGEKIT_DEFAULT_CACHEFILE_BACKEND = os.environ.get('IMAGEKIT_DEFAULT_CACHEFILE_BACKEND', 'imagekit.cachefiles.backends.Simple')
+IMAGEKIT_DEFAULT_CACHEFILE_BACKEND = os.environ.get('IMAGEKIT_DEFAULT_CACHEFILE_BACKEND',
+                                                    'imagekit.cachefiles.backends.Simple')
 
-IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = os.environ.get('IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY', 'imagekit.cachefiles.strategies.Optimistic')
+IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY = os.environ.get('IMAGEKIT_DEFAULT_CACHEFILE_STRATEGY',
+                                                     'imagekit.cachefiles.strategies.Optimistic')
 
 # Site
 
@@ -269,15 +274,20 @@ ADMIN_INDEX_TITLE = os.environ.get('ADMIN_INDEX_TITLE', 'Management')
 
 # https://django-modeladmin-reorder.readthedocs.io/en/latest/
 ADMIN_REORDER = (
-    {'app': 'auth', 'models': ('auth.User', 'auth.Group')},
-    {'app': 'goals',
-             'label': gettext('Development goals'),
-             'models': ('goals.Plan', 'goals.Goal', 'goals.Theme',
-                        'goals.SectorType', 'goals.Sector', 'goals.Target',
-                        'goals.Indicator', 'goals.Component', 'goals.Progress')},
-    {'app': 'goals',
-            'label': gettext('Areas'),
-            'models': ('goals.AreaType', 'goals.Area')},
+    {
+        'app': 'auth',
+        'models': ('auth.User', 'auth.Group')
+    }, {
+        'app': 'goals',
+        'label': gettext('Development goals'),
+        'models': ('goals.Plan', 'goals.Goal', 'goals.Theme',
+                   'goals.SectorType', 'goals.Sector', 'goals.Target',
+                   'goals.Indicator', 'goals.Component', 'goals.Progress')
+    }, {
+        'app': 'goals',
+        'label': gettext('Areas'),
+        'models': ('goals.AreaType', 'goals.Area')
+    }
 )
 
 # API
@@ -303,8 +313,6 @@ REST_FRAMEWORK = {
 CORS_ORIGIN_ALLOW_ALL = str_to_bool(os.environ.get('CORS_ORIGIN_ALLOW_ALL', 'True'))
 
 CORS_ORIGIN_WHITELIST = os.environ.get('CORS_ORIGIN_WHITELIST', '*').split()
-
-from corsheaders.defaults import default_headers
 
 CORS_ALLOW_HEADERS = default_headers + tuple(os.environ.get('CORS_ALLOW_EXTRA_HEADERS', 'x-client-id').split())
 

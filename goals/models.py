@@ -375,14 +375,6 @@ class Theme(models.Model):
         super(Theme, self).save(*args, **kwargs)
 
     @cached_property
-    def plan_code(self):
-        return json.loads(self.extras.get('plan_code', ''))
-
-    @cached_property
-    def plan_name(self):
-        return json.loads(self.extras.get('plan_name', ''))
-
-    @cached_property
     def image_url(self):
         if self.image:
             return self.image.url
@@ -462,7 +454,6 @@ class Goal(models.Model):
         self.extras['plan_code'] = self.plan.code
         super(Goal, self).save(*args, **kwargs)
 
-
     def get_slug(self):
         if not self.slug:
             slug = slugify(self.name[:50])
@@ -513,7 +504,7 @@ class Target(models.Model):
     code = models.CharField(_('Target number'), max_length=10)
     name = models.CharField(_('Target'), max_length=255)
     description = models.TextField(_('Target description'),
-                                  blank=True)
+                                   blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/targets/images',
                               blank=True, null=True)
@@ -540,7 +531,7 @@ class Target(models.Model):
         unique_together = ['code', 'goal']
 
     def __str__(self):
-        return '%s %s : %s' %(self.plan_code, self.code, truncatechars(self.description, 50))
+        return '%s %s : %s' % (self.plan_code, self.code, truncatechars(self.description, 50))
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -616,13 +607,13 @@ class Indicator(models.Model):
     theme = models.ForeignKey('goals.Theme', verbose_name=_('Theme'),
                               related_name='indicators', null=True, blank=True)
     sector = models.ForeignKey('goals.Sector', verbose_name=_('Sector'),
-                              related_name='indicators', null=True, blank=True)
+                               related_name='indicators', null=True, blank=True)
     target = models.ForeignKey(Target, verbose_name=_('Target'),
                                related_name='indicators', null=True, blank=True)
     name = models.CharField(_('Indicator'), max_length=255)
     code = models.CharField(_('Indicator number'), max_length=10)
     description = models.TextField(_('Indicator description'),
-                                  blank=True)
+                                   blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/indicators/images',
                               blank=True, null=True)
@@ -655,7 +646,7 @@ class Indicator(models.Model):
 
     def __str__(self):
         return '%s %s : %s' \
-            %(self.plan_code, self.code, self.name)
+            % (self.plan_code, self.code, self.name)
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -815,7 +806,6 @@ class Indicator(models.Model):
     def plan_code(self):
         return self.extras.get('plan_code', '')
 
-
     @cached_property
     def plan_name(self):
         return self.extras.get('plan_name', '')
@@ -847,7 +837,7 @@ class Component(models.Model):
                             unique=True)
     name = models.CharField(_('Component name'), max_length=255)
     description = models.TextField(_('Component description'),
-                                  blank=True)
+                                   blank=True)
     image = models.ImageField(_('Image'),
                               upload_to='goals/components/images',
                               blank=True, null=True)
@@ -999,7 +989,7 @@ class Progress(models.Model):
         verbose_name_plural = _('Progress')
 
     def __str__(self):
-        return '%d:%d' %(self.year, self.value)
+        return '%d:%d' % (self.year, self.value)
 
     def save(self, *args, **kwargs):
         self.extras['area_code'] = self.area.code
@@ -1081,7 +1071,7 @@ def component_indicators_changed(sender, instance, action, **kwargs):
         instance.extras['targets_ids'] = json.dumps(list(set([i.target.id for i in indctrs if i.target])))
         instance.extras['targets_codes'] = json.dumps(list(set([i.target.code for i in indctrs if i.target])))
         instance.extras['targets_names'] = json.dumps(list(set([i.target.name for i in indctrs if i.target])))
-        instance.extras['goals_ids'] = json.dumps(list(set([i.target.goal.id for i in indctrs  if i.target])))
+        instance.extras['goals_ids'] = json.dumps(list(set([i.target.goal.id for i in indctrs if i.target])))
         instance.extras['goals_codes'] = json.dumps(list(set([i.target.goal.code for i in indctrs if i.target])))
         instance.extras['goals_names'] = json.dumps(list(set([i.target.goal.name for i in indctrs if i.target])))
         instance.extras['plans_ids'] = json.dumps(list(set([i.plan.id for i in indctrs if i.plan])))

@@ -171,14 +171,14 @@ class ComponentAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
 class ProgressAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     ordering = ['id']
     search_fields = ['component__name', '^component__code',
-                 '^component__indicators__code',
-                 'component__indicators__name']
+                     '^component__indicators__code',
+                     'component__indicators__name']
     list_display = ['component_code', 'component_name', 'groups', 'year',
                     'value', 'value_unit']
     list_display_links = ['component_name', 'year', 'value']
     list_filter = [
         'year',
-        'fiscal_year', 
+        'fiscal_year',
         'component__indicators__target__goal__plan',
         'component__indicators__target__goal'
     ]
@@ -197,7 +197,7 @@ admin.site.register(Goal, GoalAdmin)
 admin.site.register(Theme, ThemeAdmin)
 admin.site.register(SectorType, SectorTypeAdmin)
 admin.site.register(Sector, SectorAdmin)
+admin.site.register(Target, TargetAdmin)
 admin.site.register(Indicator, IndicatorAdmin)
 admin.site.register(Component, ComponentAdmin)
 admin.site.register(Progress, ProgressAdmin)
-

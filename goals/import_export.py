@@ -18,12 +18,6 @@ class BaseResource(resources.ModelResource):
     extras = fields.Field(attribute='extras', widget=JSONWidget())
 
 
-class GoalResource(BaseResource):
-
-    class Meta:
-        model = Goal
-
-
 class ThemeResource(BaseResource):
 
     class Meta:
