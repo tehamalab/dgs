@@ -156,7 +156,7 @@ class ComponentAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
     search_fields = ['^code', 'name', 'description', '^indicators__code']
     list_display = ['code', 'name']
     list_display_links = ['code', 'name']
-    list_filter = ['indicators__target__goal__plan',
+    list_filter = ['indicators__target__goal__plan', 'indicators__theme',
                    'indicators__target__goal', 'stats_available', 'agency',
                    'data_source']
     prepopulated_fields = {"slug": ("name",)}
