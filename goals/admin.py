@@ -180,6 +180,7 @@ class ProgressAdmin(HiddenExtrasMixin, ImportExportModelAdmin):
         'year',
         'fiscal_year',
         'component__indicators__target__goal__plan',
+        'component__indicators__theme',
         'component__indicators__target__goal'
     ]
     list_select_related = ['component']
