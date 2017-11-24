@@ -121,7 +121,9 @@ HAYSTACK_CONNECTIONS = {
         'URL': os.environ.get('HAYSTACK_DEFAULT_URL', 'http://127.0.0.1:9200/'),
         'INDEX_NAME': os.environ.get('HAYSTACK_DEFAULT_INDEX_NAME', 'dgs'),
         'INCLUDE_SPELLING': bool(os.environ.get('HAYSTACK_DEFAULT_INCLUDE_SPELLING', True)),
-        'KWARGS': {}
+        'KWARGS': {},
+        'EXCLUDED_INDEXES': os.environ.get(
+            'HAYSTACK_DEFAULT_EXCLUDED_INDEXES', 'goals_search.search_indexes.ComponentIndex').split()
     },
 }
 
